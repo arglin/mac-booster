@@ -434,7 +434,7 @@
                 },
                 {
                     "from": {
-                        "key_code": "g",
+                        "key_code": "b",
                         "modifiers": {
                             "optional": [
                                 "left_shift"
@@ -549,7 +549,7 @@
                 },
                 {
                     "from": {
-                        "key_code": "b",
+                        "key_code": "g",
                         "modifiers": {
                             "optional": [
                                 "left_shift"
