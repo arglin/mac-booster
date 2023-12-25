@@ -1,6 +1,6 @@
 ```json
 {
-    "description": "[Right_Shift] == left(cmd+ctl+shift) | Switch application if alone",
+    "description": "[Left_command] == left_command | clickable tags | search to click",
     "manipulators": [
         {
             "conditions": [
@@ -11,7 +11,7 @@
                 }
             ],
             "from": {
-                "key_code": "right_shift",
+                "key_code": "left_command",
                 "modifiers": {
                     "optional": [
                         "any"
@@ -20,21 +20,15 @@
             },
             "to": [
                 {
-                    "key_code": "left_command",
-                    "lazy": true,
-                    "modifiers": [
-                        "left_command",
-                        "left_control",
-                        "left_shift"
-                    ]
+                    "key_code": "left_command"
                 }
             ],
             "to_if_alone": [
                 {
-                    "key_code": "y",
+                    "key_code": "j",
                     "modifiers": [
                         "right_shift",
-                        "right_option",
+                        "right_control",
                         "right_command"
                     ]
                 }
@@ -50,7 +44,7 @@
                 }
             ],
             "from": {
-                "key_code": "right_shift",
+                "key_code": "left_command",
                 "modifiers": {
                     "optional": [
                         "any"
@@ -59,20 +53,16 @@
             },
             "to": [
                 {
-                    "key_code": "left_command",
-                    "lazy": true,
-                    "modifiers": [
-                        "left_command",
-                        "left_control",
-                        "left_shift"
-                    ]
+                    "key_code": "left_command"
                 }
             ],
             "to_if_alone": [
                 {
-                    "key_code": "grave_accent_and_tilde",
+                    "key_code": "up_arrow",
                     "modifiers": [
-                        "left_command"
+                        "right_shift",
+                        "right_control",
+                        "right_command"
                     ]
                 }
             ],
