@@ -1,6 +1,5 @@
-```json
 {
-    "description": "[TrackPad bottom 3/4 touch + hjkl hold] == left_down_up_right scroll",
+    "description": "[TrackPad bottom 3/4 touch + hjkl hold | hjkl] == left_down_up_right scroll",
     "manipulators": [
         {
             "conditions": [
@@ -16,17 +15,12 @@
                 }
             ],
             "from": {
-                "key_code": "k",
-                "modifiers": {
-                    "optional": [
-                        "any"
-                    ]
-                }
+                "key_code": "k"
             },
             "to": [
                 {
                     "mouse_key": {
-                        "vertical_wheel": -64
+                        "vertical_wheel": -32
                     }
                 }
             ],
@@ -46,17 +40,12 @@
                 }
             ],
             "from": {
-                "key_code": "j",
-                "modifiers": {
-                    "optional": [
-                        "any"
-                    ]
-                }
+                "key_code": "j"
             },
             "to": [
                 {
                     "mouse_key": {
-                        "vertical_wheel": 64
+                        "vertical_wheel": 32
                     }
                 }
             ],
@@ -76,17 +65,12 @@
                 }
             ],
             "from": {
-                "key_code": "l",
-                "modifiers": {
-                    "optional": [
-                        "any"
-                    ]
-                }
+                "key_code": "l"
             },
             "to": [
                 {
                     "mouse_key": {
-                        "horizontal_wheel": 64
+                        "horizontal_wheel": 32
                     }
                 }
             ],
@@ -106,17 +90,112 @@
                 }
             ],
             "from": {
-                "key_code": "h",
-                "modifiers": {
-                    "optional": [
-                        "any"
-                    ]
-                }
+                "key_code": "h"
             },
             "to": [
                 {
                     "mouse_key": {
-                        "horizontal_wheel": -64
+                        "horizontal_wheel": -32
+                    }
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "scroll_mode",
+                    "type": "variable_if",
+                    "value": 1
+                },
+                {
+                    "name": "multitouch_extension_finger_count_total",
+                    "type": "variable_if",
+                    "value": 0
+                }
+            ],
+            "from": {
+                "key_code": "k"
+            },
+            "to": [
+                {
+                    "mouse_key": {
+                        "vertical_wheel": -32
+                    }
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "scroll_mode",
+                    "type": "variable_if",
+                    "value": 1
+                },
+                {
+                    "name": "multitouch_extension_finger_count_total",
+                    "type": "variable_if",
+                    "value": 0
+                }
+            ],
+            "from": {
+                "key_code": "j"
+            },
+            "to": [
+                {
+                    "mouse_key": {
+                        "vertical_wheel": 32
+                    }
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "scroll_mode",
+                    "type": "variable_if",
+                    "value": 1
+                },
+                {
+                    "name": "multitouch_extension_finger_count_total",
+                    "type": "variable_if",
+                    "value": 0
+                }
+            ],
+            "from": {
+                "key_code": "l"
+            },
+            "to": [
+                {
+                    "mouse_key": {
+                        "horizontal_wheel": 32
+                    }
+                }
+            ],
+            "type": "basic"
+        },
+        {
+            "conditions": [
+                {
+                    "name": "scroll_mode",
+                    "type": "variable_if",
+                    "value": 1
+                },
+                {
+                    "name": "multitouch_extension_finger_count_total",
+                    "type": "variable_if",
+                    "value": 0
+                }
+            ],
+            "from": {
+                "key_code": "h"
+            },
+            "to": [
+                {
+                    "mouse_key": {
+                        "horizontal_wheel": -32
                     }
                 }
             ],
@@ -124,4 +203,3 @@
         }
     ]
 }
-```

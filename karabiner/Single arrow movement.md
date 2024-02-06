@@ -1,4 +1,3 @@
-```json
 {
     "description": "[TrackPad top 1/4 touch + hjkl] == left_down_up_right arrow",
     "manipulators": [
@@ -14,7 +13,7 @@
                 "key_code": "h",
                 "modifiers": {
                     "optional": [
-                        "any"
+                        "left_shift"
                     ]
                 }
             },
@@ -37,7 +36,7 @@
                 "key_code": "j",
                 "modifiers": {
                     "optional": [
-                        "any"
+                        "left_shift"
                     ]
                 }
             },
@@ -60,7 +59,7 @@
                 "key_code": "k",
                 "modifiers": {
                     "optional": [
-                        "any"
+                        "left_shift"
                     ]
                 }
             },
@@ -83,7 +82,7 @@
                 "key_code": "l",
                 "modifiers": {
                     "optional": [
-                        "any"
+                        "left_shift"
                     ]
                 }
             },
@@ -96,4 +95,3 @@
         }
     ]
 }
-```

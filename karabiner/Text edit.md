@@ -1,4 +1,3 @@
-```json
 {
     "description": "[TrackPad 1 finger touch + (shift)+ |0|-|+|tab|q|w|e|r|t|y|u|i|a|s|d|f|g|z|x|c|v|b|n|m]",
     "manipulators": [
@@ -727,4 +726,3 @@
         }
     ]
 }
-```

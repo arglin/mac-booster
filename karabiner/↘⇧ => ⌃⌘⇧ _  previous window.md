@@ -1,10 +1,9 @@
-```json
 {
-    "description": "[Tab] == right(cmd+opt+shift) | shift_tab if alone",
+    "description": "[Right_shift] == ⌃⌘⇧ | previous window",
     "manipulators": [
         {
             "from": {
-                "key_code": "tab",
+                "key_code": "right_shift",
                 "modifiers": {
                     "optional": [
                         "any"
@@ -13,7 +12,18 @@
             },
             "to": [
                 {
-                    "key_code": "right_command",
+                    "key_code": "left_command",
+                    "lazy": true,
+                    "modifiers": [
+                        "left_command",
+                        "left_control",
+                        "left_shift"
+                    ]
+                }
+            ],
+            "to_if_alone": [
+                {
+                    "key_code": "n",
                     "lazy": true,
                     "modifiers": [
                         "right_command",
@@ -22,16 +32,7 @@
                     ]
                 }
             ],
-            "to_if_alone": [
-                {
-                    "key_code": "tab",
-                    "modifiers": [
-                        "right_shift"
-                    ]
-                }
-            ],
             "type": "basic"
         }
     ]
 }
-```

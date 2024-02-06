@@ -1,6 +1,5 @@
-```json
 {
-    "description": "[Left_Shift] == Left_Shift | toggle stage | show desktop space",
+    "description": "[Left_command] == left_command | homerow tags | search to click",
     "manipulators": [
         {
             "conditions": [
@@ -11,7 +10,7 @@
                 }
             ],
             "from": {
-                "key_code": "left_shift",
+                "key_code": "left_command",
                 "modifiers": {
                     "optional": [
                         "any"
@@ -20,16 +19,16 @@
             },
             "to": [
                 {
-                    "key_code": "left_shift"
+                    "key_code": "left_command"
                 }
             ],
             "to_if_alone": [
                 {
-                    "key_code": "s",
+                    "key_code": "left_arrow",
                     "modifiers": [
+                        "right_shift",
                         "right_control",
-                        "right_option",
-                        "right_command"
+                        "right_option"
                     ]
                 }
             ],
@@ -44,7 +43,7 @@
                 }
             ],
             "from": {
-                "key_code": "left_shift",
+                "key_code": "left_command",
                 "modifiers": {
                     "optional": [
                         "any"
@@ -53,16 +52,16 @@
             },
             "to": [
                 {
-                    "key_code": "left_shift"
+                    "key_code": "left_command"
                 }
             ],
             "to_if_alone": [
                 {
-                    "key_code": "d",
+                    "key_code": "right_arrow",
                     "modifiers": [
                         "right_shift",
-                        "right_option",
-                        "right_command"
+                        "right_control",
+                        "right_option"
                     ]
                 }
             ],
@@ -70,4 +69,3 @@
         }
     ]
 }
-```

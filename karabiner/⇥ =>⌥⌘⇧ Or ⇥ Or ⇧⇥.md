@@ -1,6 +1,5 @@
-```json
 {
-    "description": "[Caps Lock] == right(cmd+ctl+opt) | Escape if alone | cmd+w 1 finger trackpad",
+    "description": "[Tab] == ⌥⌘⇧ | ⇥ (alone) | ⇧ ⇥ (1 finger, alone)",
     "manipulators": [
         {
             "conditions": [
@@ -11,7 +10,7 @@
                 }
             ],
             "from": {
-                "key_code": "caps_lock",
+                "key_code": "tab",
                 "modifiers": {
                     "optional": [
                         "any"
@@ -20,18 +19,18 @@
             },
             "to": [
                 {
-                    "key_code": "right_option",
+                    "key_code": "right_command",
                     "lazy": true,
                     "modifiers": [
-                        "right_option",
                         "right_command",
-                        "right_control"
+                        "right_option",
+                        "right_shift"
                     ]
                 }
             ],
             "to_if_alone": [
                 {
-                    "key_code": "escape"
+                    "key_code": "tab"
                 }
             ],
             "type": "basic"
@@ -45,7 +44,7 @@
                 }
             ],
             "from": {
-                "key_code": "caps_lock",
+                "key_code": "tab",
                 "modifiers": {
                     "optional": [
                         "any"
@@ -54,21 +53,20 @@
             },
             "to": [
                 {
-                    "key_code": "right_option",
+                    "key_code": "right_command",
                     "lazy": true,
                     "modifiers": [
-                        "right_option",
                         "right_command",
-                        "right_control"
+                        "right_option",
+                        "right_shift"
                     ]
                 }
             ],
             "to_if_alone": [
                 {
-                    "key_code": "w",
-                    "lazy": true,
+                    "key_code": "tab",
                     "modifiers": [
-                        "left_command"
+                        "right_shift"
                     ]
                 }
             ],
@@ -76,4 +74,3 @@
         }
     ]
 }
-```

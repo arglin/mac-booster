@@ -1,64 +1,10 @@
 {
-    "description": "num_keyline relocate",
+    "description": "Relocate num_line_keys",
     "manipulators": [
-        {
-            "from": {
-                "key_code": "backslash"
-            },
-            "to_after_key_up": [
-                {
-                    "set_variable": {
-                        "name": "num_keyline_sign",
-                        "value": 0
-                    }
-                }
-            ],
-            "to_if_alone": [
-                {
-                    "key_code": "backslash"
-                }
-            ],
-            "to_if_held_down": [
-                {
-                    "set_variable": {
-                        "name": "num_keyline_sign",
-                        "value": 1
-                    }
-                }
-            ],
-            "type": "basic"
-        },
-        {
-            "from": {
-                "key_code": "quote"
-            },
-            "to_after_key_up": [
-                {
-                    "set_variable": {
-                        "name": "num_keyline",
-                        "value": 0
-                    }
-                }
-            ],
-            "to_if_alone": [
-                {
-                    "key_code": "quote"
-                }
-            ],
-            "to_if_held_down": [
-                {
-                    "set_variable": {
-                        "name": "num_keyline",
-                        "value": 1
-                    }
-                }
-            ],
-            "type": "basic"
-        },
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -77,7 +23,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -95,7 +41,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -114,7 +60,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -132,7 +78,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -151,7 +97,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -169,7 +115,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -188,7 +134,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -206,7 +152,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -225,7 +171,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -243,7 +189,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -262,7 +208,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -280,7 +226,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -299,7 +245,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -317,7 +263,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -336,7 +282,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -354,7 +300,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -373,7 +319,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -391,7 +337,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -410,7 +356,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -428,7 +374,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -447,7 +393,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -465,7 +411,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -484,7 +430,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -502,7 +448,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -521,7 +467,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -539,7 +485,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -558,7 +504,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -576,7 +522,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline_sign",
+                    "name": "num_sign_line",
                     "type": "variable_if",
                     "value": 1
                 }
@@ -595,7 +541,7 @@
         {
             "conditions": [
                 {
-                    "name": "num_keyline",
+                    "name": "num_line",
                     "type": "variable_if",
                     "value": 1
                 }

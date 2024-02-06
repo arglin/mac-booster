@@ -1,0 +1,42 @@
+{
+    "description": "[Right_option] => num_line | scroll",
+    "manipulators": [
+        {
+            "from": {
+                "key_code": "right_option",
+                "modifiers": {
+                    "optional": [
+                        "any"
+                    ]
+                }
+            },
+            "to_after_key_up": [
+                {
+                    "set_variable": {
+                        "name": "num_line",
+                        "value": 0
+                    }
+                }
+            ],
+            "to_if_alone": [
+                {
+                    "key_code": "down_arrow",
+                    "modifiers": [
+                        "right_shift",
+                        "right_control",
+                        "right_option"
+                    ]
+                }
+            ],
+            "to_if_held_down": [
+                {
+                    "set_variable": {
+                        "name": "num_line",
+                        "value": 1
+                    }
+                }
+            ],
+            "type": "basic"
+        }
+    ]
+}
