@@ -1,38 +1,38 @@
 {
-    "description": "[Right_shift] == ⌃⌘⇧ | previous window",
-    "manipulators": [
-        {
-            "from": {
-                "key_code": "right_shift",
-                "modifiers": {
-                    "optional": [
-                        "any"
-                    ]
-                }
-            },
-            "to": [
-                {
-                    "key_code": "left_command",
-                    "lazy": true,
-                    "modifiers": [
-                        "left_command",
-                        "left_control",
-                        "left_shift"
-                    ]
-                }
-            ],
-            "to_if_alone": [
-                {
-                    "key_code": "n",
-                    "lazy": true,
-                    "modifiers": [
-                        "right_command",
-                        "right_option",
-                        "right_shift"
-                    ]
-                }
-            ],
-            "type": "basic"
+  "description": "[Right_shift] == ⌃⌘⇧ | previous window",
+  "manipulators": [
+    {
+      "from": {
+        "key_code": "right_shift",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
         }
-    ]
+      },
+      "to": [
+        {
+          "key_code": "left_command",
+          "lazy": true,
+          "modifiers": [
+            "left_command",
+            "left_control",
+            "left_shift"
+          ]
+        }
+      ],
+      "to_if_alone": [
+        {
+          "key_code": "n",
+          "lazy": true,
+          "modifiers": [
+            "right_command",
+            "right_option",
+            "right_shift"
+          ]
+        }
+      ],
+      "type": "basic"
+    }
+  ]
 }

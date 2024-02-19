@@ -1,205 +1,205 @@
 {
-    "description": "[TrackPad bottom 3/4 touch + hjkl hold | hjkl] == left_down_up_right scroll",
-    "manipulators": [
+  "description": "[TrackPad bottom 3/4 touch + hjkl hold | hjkl] == left_down_up_right scroll",
+  "manipulators": [
+    {
+      "conditions": [
         {
-            "conditions": [
-                {
-                    "name": "multitouch_extension_finger_count_total",
-                    "type": "variable_if",
-                    "value": 1
-                },
-                {
-                    "name": "multitouch_extension_finger_count_upper_quarter_area",
-                    "type": "variable_if",
-                    "value": 0
-                }
-            ],
-            "from": {
-                "key_code": "k"
-            },
-            "to": [
-                {
-                    "mouse_key": {
-                        "vertical_wheel": -32
-                    }
-                }
-            ],
-            "type": "basic"
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         },
         {
-            "conditions": [
-                {
-                    "name": "multitouch_extension_finger_count_total",
-                    "type": "variable_if",
-                    "value": 1
-                },
-                {
-                    "name": "multitouch_extension_finger_count_upper_quarter_area",
-                    "type": "variable_if",
-                    "value": 0
-                }
-            ],
-            "from": {
-                "key_code": "j"
-            },
-            "to": [
-                {
-                    "mouse_key": {
-                        "vertical_wheel": 32
-                    }
-                }
-            ],
-            "type": "basic"
-        },
-        {
-            "conditions": [
-                {
-                    "name": "multitouch_extension_finger_count_total",
-                    "type": "variable_if",
-                    "value": 1
-                },
-                {
-                    "name": "multitouch_extension_finger_count_upper_quarter_area",
-                    "type": "variable_if",
-                    "value": 0
-                }
-            ],
-            "from": {
-                "key_code": "l"
-            },
-            "to": [
-                {
-                    "mouse_key": {
-                        "horizontal_wheel": 32
-                    }
-                }
-            ],
-            "type": "basic"
-        },
-        {
-            "conditions": [
-                {
-                    "name": "multitouch_extension_finger_count_total",
-                    "type": "variable_if",
-                    "value": 1
-                },
-                {
-                    "name": "multitouch_extension_finger_count_upper_quarter_area",
-                    "type": "variable_if",
-                    "value": 0
-                }
-            ],
-            "from": {
-                "key_code": "h"
-            },
-            "to": [
-                {
-                    "mouse_key": {
-                        "horizontal_wheel": -32
-                    }
-                }
-            ],
-            "type": "basic"
-        },
-        {
-            "conditions": [
-                {
-                    "name": "scroll_mode",
-                    "type": "variable_if",
-                    "value": 1
-                },
-                {
-                    "name": "multitouch_extension_finger_count_total",
-                    "type": "variable_if",
-                    "value": 0
-                }
-            ],
-            "from": {
-                "key_code": "k"
-            },
-            "to": [
-                {
-                    "mouse_key": {
-                        "vertical_wheel": -32
-                    }
-                }
-            ],
-            "type": "basic"
-        },
-        {
-            "conditions": [
-                {
-                    "name": "scroll_mode",
-                    "type": "variable_if",
-                    "value": 1
-                },
-                {
-                    "name": "multitouch_extension_finger_count_total",
-                    "type": "variable_if",
-                    "value": 0
-                }
-            ],
-            "from": {
-                "key_code": "j"
-            },
-            "to": [
-                {
-                    "mouse_key": {
-                        "vertical_wheel": 32
-                    }
-                }
-            ],
-            "type": "basic"
-        },
-        {
-            "conditions": [
-                {
-                    "name": "scroll_mode",
-                    "type": "variable_if",
-                    "value": 1
-                },
-                {
-                    "name": "multitouch_extension_finger_count_total",
-                    "type": "variable_if",
-                    "value": 0
-                }
-            ],
-            "from": {
-                "key_code": "l"
-            },
-            "to": [
-                {
-                    "mouse_key": {
-                        "horizontal_wheel": 32
-                    }
-                }
-            ],
-            "type": "basic"
-        },
-        {
-            "conditions": [
-                {
-                    "name": "scroll_mode",
-                    "type": "variable_if",
-                    "value": 1
-                },
-                {
-                    "name": "multitouch_extension_finger_count_total",
-                    "type": "variable_if",
-                    "value": 0
-                }
-            ],
-            "from": {
-                "key_code": "h"
-            },
-            "to": [
-                {
-                    "mouse_key": {
-                        "horizontal_wheel": -32
-                    }
-                }
-            ],
-            "type": "basic"
+          "name": "multitouch_extension_finger_count_upper_quarter_area",
+          "type": "variable_if",
+          "value": 0
         }
-    ]
+      ],
+      "from": {
+        "key_code": "k"
+      },
+      "to": [
+        {
+          "mouse_key": {
+            "vertical_wheel": -32
+          }
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_upper_quarter_area",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "j"
+      },
+      "to": [
+        {
+          "mouse_key": {
+            "vertical_wheel": 32
+          }
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_upper_quarter_area",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "l"
+      },
+      "to": [
+        {
+          "mouse_key": {
+            "horizontal_wheel": 32
+          }
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_upper_quarter_area",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "h"
+      },
+      "to": [
+        {
+          "mouse_key": {
+            "horizontal_wheel": -32
+          }
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "scroll_mode",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "k"
+      },
+      "to": [
+        {
+          "mouse_key": {
+            "vertical_wheel": -32
+          }
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "scroll_mode",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "j"
+      },
+      "to": [
+        {
+          "mouse_key": {
+            "vertical_wheel": 32
+          }
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "scroll_mode",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "l"
+      },
+      "to": [
+        {
+          "mouse_key": {
+            "horizontal_wheel": 32
+          }
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "scroll_mode",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "h"
+      },
+      "to": [
+        {
+          "mouse_key": {
+            "horizontal_wheel": -32
+          }
+        }
+      ],
+      "type": "basic"
+    }
+  ]
 }
