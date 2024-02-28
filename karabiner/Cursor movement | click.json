@@ -9,6 +9,11 @@
           "value": 2
         },
         {
+          "name": "multitouch_extension_finger_count_upper_quarter_area",
+          "type": "variable_if",
+          "value": 0
+        },
+        {
           "name": "current_screen",
           "type": "variable_if",
           "value": 1
@@ -44,6 +49,11 @@
           "value": 2
         },
         {
+          "name": "multitouch_extension_finger_count_upper_quarter_area",
+          "type": "variable_if",
+          "value": 0
+        },
+        {
           "name": "current_screen",
           "type": "variable_if",
           "value": 0
@@ -77,6 +87,11 @@
           "name": "multitouch_extension_finger_count_total",
           "type": "variable_if",
           "value": 2
+        },
+        {
+          "name": "multitouch_extension_finger_count_upper_quarter_area",
+          "type": "variable_if",
+          "value": 0
         },
         {
           "name": "current_screen",
@@ -308,24 +323,6 @@
         },
         {
           "name": "current_screen",
-          "type": "variable_if",
-          "value": 0
-        }
-      ],
-      "from": {
-        "key_code": "open_bracket"
-      },
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "multitouch_extension_finger_count_total",
-          "type": "variable_if",
-          "value": 1
-        },
-        {
-          "name": "current_screen",
           "type": "variable_unless",
           "value": 1
         }
@@ -356,24 +353,6 @@
             "pointing_button": "button1"
           }
         ]
-      },
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "multitouch_extension_finger_count_total",
-          "type": "variable_if",
-          "value": 1
-        },
-        {
-          "name": "current_screen",
-          "type": "variable_if",
-          "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "close_bracket"
       },
       "type": "basic"
     },
@@ -416,24 +395,6 @@
             "pointing_button": "button1"
           }
         ]
-      },
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "multitouch_extension_finger_count_total",
-          "type": "variable_if",
-          "value": 1
-        },
-        {
-          "name": "current_screen",
-          "type": "variable_if",
-          "value": 2
-        }
-      ],
-      "from": {
-        "key_code": "backslash"
       },
       "type": "basic"
     },

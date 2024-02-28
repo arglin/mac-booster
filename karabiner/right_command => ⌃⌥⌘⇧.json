@@ -1,9 +1,9 @@
 {
-  "description": "[Right_shift] == ⌃⌘⇧ | previous window",
+  "description": "[Right_command] == ⌃⌥⌘⇧",
   "manipulators": [
     {
       "from": {
-        "key_code": "right_shift",
+        "key_code": "right_command",
         "modifiers": {
           "optional": [
             "any"
@@ -17,18 +17,18 @@
           "modifiers": [
             "left_command",
             "left_control",
+            "left_option",
             "left_shift"
           ]
         }
       ],
       "to_if_alone": [
         {
-          "key_code": "n",
-          "lazy": true,
+          "key_code": "down_arrow",
           "modifiers": [
-            "right_command",
-            "right_option",
-            "right_shift"
+            "right_shift",
+            "right_control",
+            "right_option"
           ]
         }
       ],

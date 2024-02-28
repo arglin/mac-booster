@@ -4,161 +4,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
-          "type": "variable_if",
-          "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "q"
-      },
-      "to": [
-        {
-          "key_code": "2",
-          "modifiers": "left_shift"
-        }
-      ],
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
           "name": "num_line",
           "type": "variable_if",
           "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "q"
-      },
-      "to": [
+        },
         {
-          "key_code": "2"
-        }
-      ],
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "num_sign_line",
+          "name": "multitouch_extension_finger_count_total",
           "type": "variable_if",
-          "value": 1
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "w"
-      },
-      "to": [
-        {
-          "key_code": "3",
-          "modifiers": "left_shift"
+        "key_code": "q",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
         }
-      ],
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "num_line",
-          "type": "variable_if",
-          "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "w"
-      },
-      "to": [
-        {
-          "key_code": "3"
-        }
-      ],
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "num_sign_line",
-          "type": "variable_if",
-          "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "e"
-      },
-      "to": [
-        {
-          "key_code": "4",
-          "modifiers": "left_shift"
-        }
-      ],
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "num_line",
-          "type": "variable_if",
-          "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "e"
-      },
-      "to": [
-        {
-          "key_code": "4"
-        }
-      ],
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "num_sign_line",
-          "type": "variable_if",
-          "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "r"
-      },
-      "to": [
-        {
-          "key_code": "5",
-          "modifiers": "left_shift"
-        }
-      ],
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "num_line",
-          "type": "variable_if",
-          "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "r"
-      },
-      "to": [
-        {
-          "key_code": "5"
-        }
-      ],
-      "type": "basic"
-    },
-    {
-      "conditions": [
-        {
-          "name": "num_sign_line",
-          "type": "variable_if",
-          "value": 1
-        }
-      ],
-      "from": {
-        "key_code": "t"
       },
       "to": [
         {
@@ -174,10 +36,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "t"
+        "key_code": "q",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -189,13 +61,251 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "w",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
+      },
+      "to": [
+        {
+          "key_code": "2",
+          "modifiers": "left_shift"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
           "type": "variable_if",
           "value": 1
         }
       ],
       "from": {
-        "key_code": "a"
+        "key_code": "w",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
+      },
+      "to": [
+        {
+          "key_code": "2"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "e",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
+      },
+      "to": [
+        {
+          "key_code": "3",
+          "modifiers": "left_shift"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
+        }
+      ],
+      "from": {
+        "key_code": "e",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
+      },
+      "to": [
+        {
+          "key_code": "3"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "r",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
+      },
+      "to": [
+        {
+          "key_code": "4",
+          "modifiers": "left_shift"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
+        }
+      ],
+      "from": {
+        "key_code": "r",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
+      },
+      "to": [
+        {
+          "key_code": "4"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "t",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
+      },
+      "to": [
+        {
+          "key_code": "5",
+          "modifiers": "left_shift"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
+        }
+      ],
+      "from": {
+        "key_code": "t",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
+      },
+      "to": [
+        {
+          "key_code": "5"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "conditions": [
+        {
+          "name": "num_line",
+          "type": "variable_if",
+          "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
+        }
+      ],
+      "from": {
+        "key_code": "a",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -211,10 +321,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "a"
+        "key_code": "a",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -226,13 +346,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "s"
+        "key_code": "s",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -248,10 +378,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "s"
+        "key_code": "s",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -263,13 +403,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "d"
+        "key_code": "d",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -285,10 +435,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "d"
+        "key_code": "d",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -300,13 +460,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "f"
+        "key_code": "f",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -322,10 +492,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "f"
+        "key_code": "f",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -337,13 +517,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "g"
+        "key_code": "g",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -359,10 +549,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "g"
+        "key_code": "g",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -374,13 +574,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "z"
+        "key_code": "z",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -396,10 +606,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "z"
+        "key_code": "z",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -411,13 +631,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "x"
+        "key_code": "x",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -433,10 +663,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "x"
+        "key_code": "x",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -448,13 +688,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "v"
+        "key_code": "v",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -470,10 +720,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "v"
+        "key_code": "v",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -485,13 +745,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "b"
+        "key_code": "b",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -507,10 +777,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "b"
+        "key_code": "b",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -522,13 +802,23 @@
     {
       "conditions": [
         {
-          "name": "num_sign_line",
+          "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 0
         }
       ],
       "from": {
-        "key_code": "c"
+        "key_code": "c",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {
@@ -544,10 +834,20 @@
           "name": "num_line",
           "type": "variable_if",
           "value": 1
+        },
+        {
+          "name": "multitouch_extension_finger_count_total",
+          "type": "variable_if",
+          "value": 1
         }
       ],
       "from": {
-        "key_code": "c"
+        "key_code": "c",
+        "modifiers": {
+          "optional": [
+            "any"
+          ]
+        }
       },
       "to": [
         {

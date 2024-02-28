@@ -4,6 +4,8 @@
 <dict>
 	<key>AlternateMouseScroll</key>
 	<true/>
+	<key>CommandSelection</key>
+	<false/>
 	<key>Default Arrangement Name</key>
 	<string>work</string>
 	<key>Default Bookmark Guid</key>
@@ -303,6 +305,10 @@
 			</dict>
 			<key>Background Image Location</key>
 			<string></string>
+			<key>Background Image Mode</key>
+			<integer>0</integer>
+			<key>Blend</key>
+			<real>0.43516615715579715</real>
 			<key>Blinking Cursor</key>
 			<false/>
 			<key>Blur</key>
@@ -822,6 +828,8 @@
 			<string>Monaco 15</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
+			<key>Prevent Opening in a Tab</key>
+			<true/>
 			<key>Prompt Before Closing 2</key>
 			<false/>
 			<key>Right Option Key Sends</key>
@@ -888,6 +896,8 @@
 			<string>/Users/llin</string>
 		</dict>
 	</array>
+	<key>OptionClickMovesCursor</key>
+	<false/>
 	<key>PerPaneBackgroundImage</key>
 	<false/>
 	<key>PointerActions</key>
@@ -925,11 +935,15 @@
 	</dict>
 	<key>RightOption</key>
 	<integer>3</integer>
+	<key>SeparateWindowTitlePerTab</key>
+	<true/>
 	<key>ShowFullScreenTabBar</key>
 	<false/>
 	<key>ShowNewOutputIndicator</key>
 	<false/>
 	<key>ShowPaneTitles</key>
+	<false/>
+	<key>SmartPlacement</key>
 	<false/>
 	<key>SoundForEsc</key>
 	<false/>
@@ -944,7 +958,7 @@
 	<key>SwitchWindowModifier</key>
 	<integer>4</integer>
 	<key>TabStyleWithAutomaticOption</key>
-	<integer>6</integer>
+	<integer>4</integer>
 	<key>TabViewType</key>
 	<integer>1</integer>
 	<key>TabsHaveCloseButton</key>
@@ -952,6 +966,8 @@
 	<key>UIElementRequiresHotkeys</key>
 	<false/>
 	<key>UseBorder</key>
+	<false/>
+	<key>UseLionStyleFullscreen</key>
 	<false/>
 	<key>UseVirtualKeyCodesForDetectingDigits</key>
 	<false/>
