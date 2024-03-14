@@ -1,0 +1,32 @@
+# AI actions
+rcmd - a : osascript -e 'tell application "System Events" to keystroke "a" using {command down, control down, option down, shift down}'
+rcmd - b : osascript -e 'tell application "System Events" to keystroke "b" using {command down, control down, option down, shift down}'
+rcmd - f : osascript -e 'tell application "System Events" to keystroke "f" using {command down, control down, option down, shift down}'
+rcmd - s : osascript -e 'tell application "System Events" to keystroke "s" using {command down, control down, option down, shift down}'
+rcmd - r : osascript -e 'tell application "System Events" to keystroke "r" using {command down, control down, option down, shift down}'
+
+# arrows
+rcmd - l: skhd -k "right"
+rcmd - h: skhd -k "left"
+rcmd - k: skhd -k "up"
+rcmd - j: skhd -k "down"
+
+# open applications
+rshift - s : osascript -e 'tell application "System Events" to keystroke "s" using {command down, control down, shift down}'
+rshift - e : osascript -e 'tell application "System Events" to keystroke "e" using {command down, control down, shift down}'
+rshift - m : osascript -e 'tell application "System Events" to keystroke "m" using {command down, control down, shift down}'
+rshift - c : osascript -e 'tell application "System Events" to keystroke "c" using {command down, control down, shift down}'
+rshift - t : osascript -e 'tell application "System Events" to keystroke "t" using {command down, control down, shift down}'
+rshift - f : osascript -e 'tell application "System Events" to keystroke "f" using {command down, control down, shift down}'
+rshift - a : osascript -e 'tell application "System Events" to keystroke "a" using {command down, control down, shift down}'
+rshift - b : osascript -e 'tell application "System Events" to keystroke "b" using {command down, control down, shift down}'
+
+
+# application shortcuts
+ralt - a : osascript -e 'tell application "System Events" to keystroke "a" using {option down, control down, shift down}'
+ralt - w : osascript -e 'tell application "System Events" to keystroke "w" using {option down, control down, shift down}'
+ralt - s : osascript -e 'tell application "System Events" to keystroke "s" using {option down, control down, shift down}'
+ralt - r : osascript -e 'tell application "System Events" to keystroke "r" using {option down, control down, shift down}'
+ralt - f : osascript -e 'tell application "System Events" to keystroke "f" using {option down, control down, shift down}'
+
+
