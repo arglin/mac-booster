@@ -70,6 +70,8 @@ require('autosave').setup(
   }
 )
 ]]
-lvim.mouse = ""
 vim.opt.wrap = true
 vim.opt.showtabline = 0
+vim.opt.nu = true
+vim.opt.rnu = true
+vim.o.statuscolumn = "%s %l %r "

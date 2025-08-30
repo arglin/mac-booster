@@ -11,16 +11,16 @@
         <string>--set</string>
         <string>{"UserKeyMapping":[
             {
-              "HIDKeyboardModifierMappingSrc": 0x7000000E6,
-              "HIDKeyboardModifierMappingDst": 0x70000002B
+          "HIDKeyboardModifierMappingSrc": 0x7000000E6, <!--> ralt<-->
+              "HIDKeyboardModifierMappingDst": 0x70000002B  <!--> tab <-->
             },
             {
-              "HIDKeyboardModifierMappingSrc": 0x700000039,
-              "HIDKeyboardModifierMappingDst": 0x7000000E4
+              "HIDKeyboardModifierMappingSrc": 0x700000039, <!--> caps_lock<-->
+              "HIDKeyboardModifierMappingDst": 0x7000000E4 <!--> rctl<-->
             },
             {
-              "HIDKeyboardModifierMappingSrc": 0x70000002B,
-              "HIDKeyboardModifierMappingDst": 0x7000000E6
+              "HIDKeyboardModifierMappingSrc": 0x70000002B, <!--> ralt<-->
+              "HIDKeyboardModifierMappingDst": 0x7000000E6 <!--> ralt<-->
             }
         ]}</string>
     </array>

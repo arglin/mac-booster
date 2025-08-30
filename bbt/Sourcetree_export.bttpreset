@@ -1,0 +1,581 @@
+[
+  {
+    "BTTAppBundleIdentifier" : "com.torusknot.SourceTreeNotMAS",
+    "BTTAppName" : "Sourcetree",
+    "BTTAppAutoInvertIcon" : 1,
+    "BTTAppProcessMatchMode" : 2,
+    "BTTAppProcessName" : "Sourcetree",
+    "BTTTriggers" : [
+      {
+        "BTTActionCategory" : 0,
+        "BTTLastUpdatedAt" : 1723927124.5552979,
+        "BTTTriggerConditionsFormatReadOnly" : "NOT (active_app_name == \"Raycast\" OR visible_window_list CONTAINS \"Raycast -  -\")",
+        "BTTTriggerConditionsData" : "YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGvECELDBMYHCEpMzQ3PkJHSEtPU1dYW2Nna3B1eXx9gIGFiIpVJG51bGzTDQ4PEBESXxAXTlNDb21wb3VuZFByZWRpY2F0ZVR5cGVfEA9OU1N1YnByZWRpY2F0ZXNWJGNsYXNzEACAAoAg0hQPFRdaTlMub2JqZWN0c6EWgAOAH9MNDg8ZGhIQAoAEgCDSFA8dF6IeH4AFgBaAH9QPIiMkJSYnKF8QEU5TUmlnaHRFeHByZXNzaW9uXxAQTlNMZWZ0RXhwcmVzc2lvbl8QE05TUHJlZGljYXRlT3BlcmF0b3KAFYAQgAaAE9UqKywtDy4vMDEyWU5TT3BlcmFuZF5OU1NlbGVjdG9yTmFtZV8QEE5TRXhwcmVzc2lvblR5cGVbTlNBcmd1bWVudHOACIAHEAOACoAPXHZhbHVlRm9yS2V5OtIsDzU2EAGACdI4OTo7WiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU1NlbGZFeHByZXNzaW9uozo8PVxOU0V4cHJlc3Npb25YTlNPYmplY3TSFA8_QaFAgAuADtMPLENERUZZTlNLZXlQYXRogA0QCoAMXxAPYWN0aXZlX2FwcF9uYW1l0jg5SUpfEBxOU0tleVBhdGhTcGVjaWZpZXJFeHByZXNzaW9uo0k8PdI4OUxNXk5TTXV0YWJsZUFycmF5o0xOPVdOU0FycmF50jg5UFFfEBNOU0tleVBhdGhFeHByZXNzaW9upFBSPD1fEBROU0Z1bmN0aW9uRXhwcmVzc2lvbtNULA9VEFZfEA9OU0NvbnN0YW50VmFsdWWAEYASV1JheWNhc3TSODlZWl8QGU5TQ29uc3RhbnRWYWx1ZUV4cHJlc3Npb26jWTw91Q9cXV5fYBBhEGJaTlNNb2RpZmllclhOU05lZ2F0ZVlOU09wdGlvbnNeTlNPcGVyYXRvclR5cGWAFAgQBNI4OWRlXxAbTlNFcXVhbGl0eVByZWRpY2F0ZU9wZXJhdG9yo2RmPV8QE05TUHJlZGljYXRlT3BlcmF0b3LSODloaV8QFU5TQ29tcGFyaXNvblByZWRpY2F0ZaNoaj1bTlNQcmVkaWNhdGXUDyIjJCVtbm+AFYAbgBeAHdUqKywtDy4vMHMygAiAB4AYgA_SFA92QaF3gBmADtMPLENERXuADYAaXxATdmlzaWJsZV93aW5kb3dfbGlzdNNULA9+EFaAHIASXFJheWNhc3QgLSAgLdQPXIJfgxAQhFdOU0ZsYWdzgB4QY9I4OYaHXxAVTlNJblByZWRpY2F0ZU9wZXJhdG9yo4ZmPdI4OU6Jok490jg5i4xfEBNOU0NvbXBvdW5kUHJlZGljYXRlo4tqPQAIABEAGgAkACkAMgA3AEkATABRAFMAdwB9AIQAngCwALcAuQC7AL0AwgDNAM8A0QDTANoA3ADeAOAA5QDoAOoA7ADuAPcBCwEeATQBNgE4AToBPAFHAVEBYAFzAX8BgQGDAYUBhwGJAZYBmwGdAZ8BpAGvAbgBywHPAdwB5QHqAewB7gHwAfcCAQIDAgUCBwIZAh4CPQJBAkYCVQJZAmECZgJ8AoECmAKfArECswK1Ar0CwgLeAuIC7QL4AwEDCwMaAxwDHQMfAyQDQgNGA1wDYQN5A30DiQOSA5QDlgOYA5oDpQOnA6kDqwOtA7IDtAO2A7gDvwPBA8MD2QPgA+ID5APxA_oEAgQEBAYECwQjBCcELAQvBDQESgAAAAAAAAIBAAAAAAAAAI0AAAAAAAAAAAAAAAAAAARO",
+        "BTTTriggerType" : 624,
+        "BTTTriggerTypeDescriptionReadOnly" : "Please Select a Trigger ",
+        "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+        "BTTUUID" : "BBBABF45-9B19-4593-99F9-E39F6BE89D12",
+        "BTTPredefinedActionType" : 366,
+        "BTTPredefinedActionName" : "Empty Placeholder",
+        "BTTEnabled" : 1,
+        "BTTEnabled2" : 1,
+        "BTTOrder" : 4,
+        "BTTAdditionalActions" : [
+          {
+            "BTTActionCategory" : 0,
+            "BTTLastUpdatedAt" : 1723765280.4467521,
+            "BTTTriggerParentUUID" : "BBBABF45-9B19-4593-99F9-E39F6BE89D12",
+            "BTTIsPureAction" : true,
+            "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+            "BTTUUID" : "147C6FFF-AD59-4D1F-97D7-47187B93A76C",
+            "BTTLayoutIndependentActionChar" : "u",
+            "BTTShortcutToSend" : "58,55,32",
+            "BTTEnabled" : 1,
+            "BTTEnabled2" : 1,
+            "BTTOrder" : 3
+          }
+        ],
+        "BTTKeySequence" : {
+          "BTTPauseAfter" : 0.14903517759562843,
+          "BTTPauseBefore" : 0.15313353825136611,
+          "BTTPauseBetween" : 0.32653061224489793,
+          "BTTCharactersToDeleteAfterwards" : 2,
+          "BTTKeyCount" : 4,
+          "BTTKeySequenceDownKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745619072
+            },
+            {
+              "BTTKEYCharacter" : " K",
+              "BTTKEYCode" : 40,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745619072
+            }
+          ],
+          "BTTKeySequenceMixedKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745619072
+            },
+            {
+              "BTTKEYCharacter" : " K",
+              "BTTKEYCode" : 40,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745619072
+            },
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745619072
+            },
+            {
+              "BTTKEYCharacter" : " K",
+              "BTTKEYCode" : 40,
+              "BTTKEYTime" : 745619072
+            }
+          ],
+          "BTTKeySequenceUpKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745619072
+            },
+            {
+              "BTTKEYCharacter" : " K",
+              "BTTKEYCode" : 40,
+              "BTTKEYTime" : 745619072
+            }
+          ]
+        }
+      },
+      {
+        "BTTActionCategory" : 0,
+        "BTTLastUpdatedAt" : 1723927129.214483,
+        "BTTTriggerConditionsFormatReadOnly" : "NOT (active_app_name == \"Raycast\" OR visible_window_list CONTAINS \"Raycast -  -\")",
+        "BTTTriggerConditionsData" : "YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGvECELDBMYHCEpMzQ3PkJHSEtPU1dYW2Nna3B1eXx9gIGFiIpVJG51bGzTDQ4PEBESXxAXTlNDb21wb3VuZFByZWRpY2F0ZVR5cGVfEA9OU1N1YnByZWRpY2F0ZXNWJGNsYXNzEACAAoAg0hQPFRdaTlMub2JqZWN0c6EWgAOAH9MNDg8ZGhIQAoAEgCDSFA8dF6IeH4AFgBaAH9QPIiMkJSYnKF8QEU5TUmlnaHRFeHByZXNzaW9uXxAQTlNMZWZ0RXhwcmVzc2lvbl8QE05TUHJlZGljYXRlT3BlcmF0b3KAFYAQgAaAE9UqKywtDy4vMDEyWU5TT3BlcmFuZF5OU1NlbGVjdG9yTmFtZV8QEE5TRXhwcmVzc2lvblR5cGVbTlNBcmd1bWVudHOACIAHEAOACoAPXHZhbHVlRm9yS2V5OtIsDzU2EAGACdI4OTo7WiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU1NlbGZFeHByZXNzaW9uozo8PVxOU0V4cHJlc3Npb25YTlNPYmplY3TSFA8_QaFAgAuADtMPLENERUZZTlNLZXlQYXRogA0QCoAMXxAPYWN0aXZlX2FwcF9uYW1l0jg5SUpfEBxOU0tleVBhdGhTcGVjaWZpZXJFeHByZXNzaW9uo0k8PdI4OUxNXk5TTXV0YWJsZUFycmF5o0xOPVdOU0FycmF50jg5UFFfEBNOU0tleVBhdGhFeHByZXNzaW9upFBSPD1fEBROU0Z1bmN0aW9uRXhwcmVzc2lvbtNULA9VEFZfEA9OU0NvbnN0YW50VmFsdWWAEYASV1JheWNhc3TSODlZWl8QGU5TQ29uc3RhbnRWYWx1ZUV4cHJlc3Npb26jWTw91Q9cXV5fYBBhEGJaTlNNb2RpZmllclhOU05lZ2F0ZVlOU09wdGlvbnNeTlNPcGVyYXRvclR5cGWAFAgQBNI4OWRlXxAbTlNFcXVhbGl0eVByZWRpY2F0ZU9wZXJhdG9yo2RmPV8QE05TUHJlZGljYXRlT3BlcmF0b3LSODloaV8QFU5TQ29tcGFyaXNvblByZWRpY2F0ZaNoaj1bTlNQcmVkaWNhdGXUDyIjJCVtbm+AFYAbgBeAHdUqKywtDy4vMHMygAiAB4AYgA_SFA92QaF3gBmADtMPLENERXuADYAaXxATdmlzaWJsZV93aW5kb3dfbGlzdNNULA9+EFaAHIASXFJheWNhc3QgLSAgLdQPXIJfgxAQhFdOU0ZsYWdzgB4QY9I4OYaHXxAVTlNJblByZWRpY2F0ZU9wZXJhdG9yo4ZmPdI4OU6Jok490jg5i4xfEBNOU0NvbXBvdW5kUHJlZGljYXRlo4tqPQAIABEAGgAkACkAMgA3AEkATABRAFMAdwB9AIQAngCwALcAuQC7AL0AwgDNAM8A0QDTANoA3ADeAOAA5QDoAOoA7ADuAPcBCwEeATQBNgE4AToBPAFHAVEBYAFzAX8BgQGDAYUBhwGJAZYBmwGdAZ8BpAGvAbgBywHPAdwB5QHqAewB7gHwAfcCAQIDAgUCBwIZAh4CPQJBAkYCVQJZAmECZgJ8AoECmAKfArECswK1Ar0CwgLeAuIC7QL4AwEDCwMaAxwDHQMfAyQDQgNGA1wDYQN5A30DiQOSA5QDlgOYA5oDpQOnA6kDqwOtA7IDtAO2A7gDvwPBA8MD2QPgA+ID5APxA_oEAgQEBAYECwQjBCcELAQvBDQESgAAAAAAAAIBAAAAAAAAAI0AAAAAAAAAAAAAAAAAAARO",
+        "BTTTriggerType" : 624,
+        "BTTTriggerTypeDescriptionReadOnly" : "Please Select a Trigger ",
+        "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+        "BTTUUID" : "2B42A909-68E3-41F7-963D-D2EB443AE2B1",
+        "BTTPredefinedActionType" : 366,
+        "BTTPredefinedActionName" : "Empty Placeholder",
+        "BTTEnabled" : 1,
+        "BTTEnabled2" : 1,
+        "BTTOrder" : 5,
+        "BTTAdditionalActions" : [
+          {
+            "BTTActionCategory" : 0,
+            "BTTLastUpdatedAt" : 1723765324.747252,
+            "BTTTriggerParentUUID" : "2B42A909-68E3-41F7-963D-D2EB443AE2B1",
+            "BTTIsPureAction" : true,
+            "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+            "BTTUUID" : "1A49AD04-0C86-462C-8743-B4B7954487A7",
+            "BTTLayoutIndependentActionChar" : "b",
+            "BTTShortcutToSend" : "56,55,11",
+            "BTTEnabled" : 1,
+            "BTTEnabled2" : 1,
+            "BTTOrder" : 3
+          }
+        ],
+        "BTTKeySequence" : {
+          "BTTPauseAfter" : 0.14903517759562843,
+          "BTTPauseBefore" : 0.15313353825136611,
+          "BTTPauseBetween" : 0.32653061224489793,
+          "BTTCharactersToDeleteAfterwards" : 2,
+          "BTTKeyCount" : 4,
+          "BTTKeySequenceDownKeys" : [
+            {
+              "BTTKEYCharacter" : " N",
+              "BTTKEYCode" : 45,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745458112
+            },
+            {
+              "BTTKEYCharacter" : " B",
+              "BTTKEYCode" : 11,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745458112
+            }
+          ],
+          "BTTKeySequenceMixedKeys" : [
+            {
+              "BTTKEYCharacter" : " N",
+              "BTTKEYCode" : 45,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745458112
+            },
+            {
+              "BTTKEYCharacter" : " N",
+              "BTTKEYCode" : 45,
+              "BTTKEYTime" : 745458112
+            },
+            {
+              "BTTKEYCharacter" : " B",
+              "BTTKEYCode" : 11,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745458112
+            },
+            {
+              "BTTKEYCharacter" : " B",
+              "BTTKEYCode" : 11,
+              "BTTKEYTime" : 745458112
+            }
+          ],
+          "BTTKeySequenceUpKeys" : [
+            {
+              "BTTKEYCharacter" : " N",
+              "BTTKEYCode" : 45,
+              "BTTKEYTime" : 745458112
+            },
+            {
+              "BTTKEYCharacter" : " B",
+              "BTTKEYCode" : 11,
+              "BTTKEYTime" : 745458112
+            }
+          ]
+        }
+      },
+      {
+        "BTTActionCategory" : 0,
+        "BTTLastUpdatedAt" : 1723927119.10728,
+        "BTTTriggerConditionsFormatReadOnly" : "NOT (active_app_name == \"Raycast\" OR visible_window_list CONTAINS \"Raycast -  -\")",
+        "BTTTriggerConditionsData" : "YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGvECELDBMYHCEpMzQ3PkJHSEtPU1dYW2Nna3B1eXx9gIGFiIpVJG51bGzTDQ4PEBESXxAXTlNDb21wb3VuZFByZWRpY2F0ZVR5cGVfEA9OU1N1YnByZWRpY2F0ZXNWJGNsYXNzEACAAoAg0hQPFRdaTlMub2JqZWN0c6EWgAOAH9MNDg8ZGhIQAoAEgCDSFA8dF6IeH4AFgBaAH9QPIiMkJSYnKF8QEU5TUmlnaHRFeHByZXNzaW9uXxAQTlNMZWZ0RXhwcmVzc2lvbl8QE05TUHJlZGljYXRlT3BlcmF0b3KAFYAQgAaAE9UqKywtDy4vMDEyWU5TT3BlcmFuZF5OU1NlbGVjdG9yTmFtZV8QEE5TRXhwcmVzc2lvblR5cGVbTlNBcmd1bWVudHOACIAHEAOACoAPXHZhbHVlRm9yS2V5OtIsDzU2EAGACdI4OTo7WiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU1NlbGZFeHByZXNzaW9uozo8PVxOU0V4cHJlc3Npb25YTlNPYmplY3TSFA8_QaFAgAuADtMPLENERUZZTlNLZXlQYXRogA0QCoAMXxAPYWN0aXZlX2FwcF9uYW1l0jg5SUpfEBxOU0tleVBhdGhTcGVjaWZpZXJFeHByZXNzaW9uo0k8PdI4OUxNXk5TTXV0YWJsZUFycmF5o0xOPVdOU0FycmF50jg5UFFfEBNOU0tleVBhdGhFeHByZXNzaW9upFBSPD1fEBROU0Z1bmN0aW9uRXhwcmVzc2lvbtNULA9VEFZfEA9OU0NvbnN0YW50VmFsdWWAEYASV1JheWNhc3TSODlZWl8QGU5TQ29uc3RhbnRWYWx1ZUV4cHJlc3Npb26jWTw91Q9cXV5fYBBhEGJaTlNNb2RpZmllclhOU05lZ2F0ZVlOU09wdGlvbnNeTlNPcGVyYXRvclR5cGWAFAgQBNI4OWRlXxAbTlNFcXVhbGl0eVByZWRpY2F0ZU9wZXJhdG9yo2RmPV8QE05TUHJlZGljYXRlT3BlcmF0b3LSODloaV8QFU5TQ29tcGFyaXNvblByZWRpY2F0ZaNoaj1bTlNQcmVkaWNhdGXUDyIjJCVtbm+AFYAbgBeAHdUqKywtDy4vMHMygAiAB4AYgA_SFA92QaF3gBmADtMPLENERXuADYAaXxATdmlzaWJsZV93aW5kb3dfbGlzdNNULA9+EFaAHIASXFJheWNhc3QgLSAgLdQPXIJfgxAQhFdOU0ZsYWdzgB4QY9I4OYaHXxAVTlNJblByZWRpY2F0ZU9wZXJhdG9yo4ZmPdI4OU6Jok490jg5i4xfEBNOU0NvbXBvdW5kUHJlZGljYXRlo4tqPQAIABEAGgAkACkAMgA3AEkATABRAFMAdwB9AIQAngCwALcAuQC7AL0AwgDNAM8A0QDTANoA3ADeAOAA5QDoAOoA7ADuAPcBCwEeATQBNgE4AToBPAFHAVEBYAFzAX8BgQGDAYUBhwGJAZYBmwGdAZ8BpAGvAbgBywHPAdwB5QHqAewB7gHwAfcCAQIDAgUCBwIZAh4CPQJBAkYCVQJZAmECZgJ8AoECmAKfArECswK1Ar0CwgLeAuIC7QL4AwEDCwMaAxwDHQMfAyQDQgNGA1wDYQN5A30DiQOSA5QDlgOYA5oDpQOnA6kDqwOtA7IDtAO2A7gDvwPBA8MD2QPgA+ID5APxA_oEAgQEBAYECwQjBCcELAQvBDQESgAAAAAAAAIBAAAAAAAAAI0AAAAAAAAAAAAAAAAAAARO",
+        "BTTTriggerType" : 624,
+        "BTTTriggerTypeDescriptionReadOnly" : "Please Select a Trigger ",
+        "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+        "BTTUUID" : "C9F14C4F-35F3-4BC7-BA70-426BE29FA207",
+        "BTTPredefinedActionType" : 366,
+        "BTTPredefinedActionName" : "Empty Placeholder",
+        "BTTEnabled" : 1,
+        "BTTEnabled2" : 1,
+        "BTTOrder" : 3,
+        "BTTAdditionalActions" : [
+          {
+            "BTTActionCategory" : 0,
+            "BTTLastUpdatedAt" : 1723765206.2533131,
+            "BTTTriggerParentUUID" : "C9F14C4F-35F3-4BC7-BA70-426BE29FA207",
+            "BTTIsPureAction" : true,
+            "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+            "BTTUUID" : "595D6D43-23EC-4914-BDF8-5B3485AB4398",
+            "BTTLayoutIndependentActionChar" : "f",
+            "BTTShortcutToSend" : "56,55,3",
+            "BTTEnabled" : 1,
+            "BTTEnabled2" : 1,
+            "BTTOrder" : 3
+          }
+        ],
+        "BTTKeySequence" : {
+          "BTTPauseAfter" : 0.14903517759562843,
+          "BTTPauseBefore" : 0.15313353825136611,
+          "BTTPauseBetween" : 0.18740354938271606,
+          "BTTCharactersToDeleteAfterwards" : 2,
+          "BTTKeyCount" : 4,
+          "BTTKeySequenceDownKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " F",
+              "BTTKEYCode" : 3,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457984
+            }
+          ],
+          "BTTKeySequenceMixedKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " F",
+              "BTTKEYCode" : 3,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " F",
+              "BTTKEYCode" : 3,
+              "BTTKEYTime" : 745457984
+            }
+          ],
+          "BTTKeySequenceUpKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " F",
+              "BTTKEYCode" : 3,
+              "BTTKEYTime" : 745457984
+            }
+          ]
+        }
+      },
+      {
+        "BTTActionCategory" : 0,
+        "BTTLastUpdatedAt" : 1723927110.237046,
+        "BTTTriggerConditionsFormatReadOnly" : "NOT (active_app_name == \"Raycast\" OR visible_window_list CONTAINS \"Raycast -  -\")",
+        "BTTTriggerConditionsData" : "YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGvECELDBMYHCEpMzQ3PkJHSEtPU1dYW2Nna3B1eXx9gIGFiIpVJG51bGzTDQ4PEBESXxAXTlNDb21wb3VuZFByZWRpY2F0ZVR5cGVfEA9OU1N1YnByZWRpY2F0ZXNWJGNsYXNzEACAAoAg0hQPFRdaTlMub2JqZWN0c6EWgAOAH9MNDg8ZGhIQAoAEgCDSFA8dF6IeH4AFgBaAH9QPIiMkJSYnKF8QEU5TUmlnaHRFeHByZXNzaW9uXxAQTlNMZWZ0RXhwcmVzc2lvbl8QE05TUHJlZGljYXRlT3BlcmF0b3KAFYAQgAaAE9UqKywtDy4vMDEyWU5TT3BlcmFuZF5OU1NlbGVjdG9yTmFtZV8QEE5TRXhwcmVzc2lvblR5cGVbTlNBcmd1bWVudHOACIAHEAOACoAPXHZhbHVlRm9yS2V5OtIsDzU2EAGACdI4OTo7WiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU1NlbGZFeHByZXNzaW9uozo8PVxOU0V4cHJlc3Npb25YTlNPYmplY3TSFA8_QaFAgAuADtMPLENERUZZTlNLZXlQYXRogA0QCoAMXxAPYWN0aXZlX2FwcF9uYW1l0jg5SUpfEBxOU0tleVBhdGhTcGVjaWZpZXJFeHByZXNzaW9uo0k8PdI4OUxNXk5TTXV0YWJsZUFycmF5o0xOPVdOU0FycmF50jg5UFFfEBNOU0tleVBhdGhFeHByZXNzaW9upFBSPD1fEBROU0Z1bmN0aW9uRXhwcmVzc2lvbtNULA9VEFZfEA9OU0NvbnN0YW50VmFsdWWAEYASV1JheWNhc3TSODlZWl8QGU5TQ29uc3RhbnRWYWx1ZUV4cHJlc3Npb26jWTw91Q9cXV5fYBBhEGJaTlNNb2RpZmllclhOU05lZ2F0ZVlOU09wdGlvbnNeTlNPcGVyYXRvclR5cGWAFAgQBNI4OWRlXxAbTlNFcXVhbGl0eVByZWRpY2F0ZU9wZXJhdG9yo2RmPV8QE05TUHJlZGljYXRlT3BlcmF0b3LSODloaV8QFU5TQ29tcGFyaXNvblByZWRpY2F0ZaNoaj1bTlNQcmVkaWNhdGXUDyIjJCVtbm+AFYAbgBeAHdUqKywtDy4vMHMygAiAB4AYgA_SFA92QaF3gBmADtMPLENERXuADYAaXxATdmlzaWJsZV93aW5kb3dfbGlzdNNULA9+EFaAHIASXFJheWNhc3QgLSAgLdQPXIJfgxAQhFdOU0ZsYWdzgB4QY9I4OYaHXxAVTlNJblByZWRpY2F0ZU9wZXJhdG9yo4ZmPdI4OU6Jok490jg5i4xfEBNOU0NvbXBvdW5kUHJlZGljYXRlo4tqPQAIABEAGgAkACkAMgA3AEkATABRAFMAdwB9AIQAngCwALcAuQC7AL0AwgDNAM8A0QDTANoA3ADeAOAA5QDoAOoA7ADuAPcBCwEeATQBNgE4AToBPAFHAVEBYAFzAX8BgQGDAYUBhwGJAZYBmwGdAZ8BpAGvAbgBywHPAdwB5QHqAewB7gHwAfcCAQIDAgUCBwIZAh4CPQJBAkYCVQJZAmECZgJ8AoECmAKfArECswK1Ar0CwgLeAuIC7QL4AwEDCwMaAxwDHQMfAyQDQgNGA1wDYQN5A30DiQOSA5QDlgOYA5oDpQOnA6kDqwOtA7IDtAO2A7gDvwPBA8MD2QPgA+ID5APxA_oEAgQEBAYECwQjBCcELAQvBDQESgAAAAAAAAIBAAAAAAAAAI0AAAAAAAAAAAAAAAAAAARO",
+        "BTTTriggerType" : 624,
+        "BTTTriggerTypeDescriptionReadOnly" : "Please Select a Trigger ",
+        "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+        "BTTUUID" : "4E8C98BC-2705-4D73-AFBA-99FF5D0A6F5B",
+        "BTTPredefinedActionType" : 366,
+        "BTTPredefinedActionName" : "Empty Placeholder",
+        "BTTEnabled" : 1,
+        "BTTEnabled2" : 1,
+        "BTTOrder" : 1,
+        "BTTAdditionalActions" : [
+          {
+            "BTTActionCategory" : 0,
+            "BTTLastUpdatedAt" : 1723765108.0331879,
+            "BTTTriggerParentUUID" : "4E8C98BC-2705-4D73-AFBA-99FF5D0A6F5B",
+            "BTTIsPureAction" : true,
+            "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+            "BTTUUID" : "A1AD0681-167D-43A6-AA36-4445C5C84337",
+            "BTTLayoutIndependentActionChar" : "l",
+            "BTTShortcutToSend" : "56,55,37",
+            "BTTEnabled" : 1,
+            "BTTEnabled2" : 1,
+            "BTTOrder" : 3
+          }
+        ],
+        "BTTKeySequence" : {
+          "BTTPauseAfter" : 0.14903517759562843,
+          "BTTPauseBefore" : 0.15313353825136611,
+          "BTTPauseBetween" : 0.18740354938271606,
+          "BTTCharactersToDeleteAfterwards" : 2,
+          "BTTKeyCount" : 4,
+          "BTTKeySequenceDownKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " L",
+              "BTTKEYCode" : 37,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457984
+            }
+          ],
+          "BTTKeySequenceMixedKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " L",
+              "BTTKEYCode" : 37,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " L",
+              "BTTKEYCode" : 37,
+              "BTTKEYTime" : 745457984
+            }
+          ],
+          "BTTKeySequenceUpKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745457984
+            },
+            {
+              "BTTKEYCharacter" : " L",
+              "BTTKEYCode" : 37,
+              "BTTKEYTime" : 745457984
+            }
+          ]
+        }
+      },
+      {
+        "BTTActionCategory" : 0,
+        "BTTLastUpdatedAt" : 1723927110.235918,
+        "BTTTriggerConditionsFormatReadOnly" : "NOT (active_app_name == \"Raycast\" OR visible_window_list CONTAINS \"Raycast -  -\")",
+        "BTTTriggerConditionsData" : "YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGvECELDBMYHCEpMzQ3PkJHSEtPU1dYW2Nna3B1eXx9gIGFiIpVJG51bGzTDQ4PEBESXxAXTlNDb21wb3VuZFByZWRpY2F0ZVR5cGVfEA9OU1N1YnByZWRpY2F0ZXNWJGNsYXNzEACAAoAg0hQPFRdaTlMub2JqZWN0c6EWgAOAH9MNDg8ZGhIQAoAEgCDSFA8dF6IeH4AFgBaAH9QPIiMkJSYnKF8QEU5TUmlnaHRFeHByZXNzaW9uXxAQTlNMZWZ0RXhwcmVzc2lvbl8QE05TUHJlZGljYXRlT3BlcmF0b3KAFYAQgAaAE9UqKywtDy4vMDEyWU5TT3BlcmFuZF5OU1NlbGVjdG9yTmFtZV8QEE5TRXhwcmVzc2lvblR5cGVbTlNBcmd1bWVudHOACIAHEAOACoAPXHZhbHVlRm9yS2V5OtIsDzU2EAGACdI4OTo7WiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU1NlbGZFeHByZXNzaW9uozo8PVxOU0V4cHJlc3Npb25YTlNPYmplY3TSFA8_QaFAgAuADtMPLENERUZZTlNLZXlQYXRogA0QCoAMXxAPYWN0aXZlX2FwcF9uYW1l0jg5SUpfEBxOU0tleVBhdGhTcGVjaWZpZXJFeHByZXNzaW9uo0k8PdI4OUxNXk5TTXV0YWJsZUFycmF5o0xOPVdOU0FycmF50jg5UFFfEBNOU0tleVBhdGhFeHByZXNzaW9upFBSPD1fEBROU0Z1bmN0aW9uRXhwcmVzc2lvbtNULA9VEFZfEA9OU0NvbnN0YW50VmFsdWWAEYASV1JheWNhc3TSODlZWl8QGU5TQ29uc3RhbnRWYWx1ZUV4cHJlc3Npb26jWTw91Q9cXV5fYBBhEGJaTlNNb2RpZmllclhOU05lZ2F0ZVlOU09wdGlvbnNeTlNPcGVyYXRvclR5cGWAFAgQBNI4OWRlXxAbTlNFcXVhbGl0eVByZWRpY2F0ZU9wZXJhdG9yo2RmPV8QE05TUHJlZGljYXRlT3BlcmF0b3LSODloaV8QFU5TQ29tcGFyaXNvblByZWRpY2F0ZaNoaj1bTlNQcmVkaWNhdGXUDyIjJCVtbm+AFYAbgBeAHdUqKywtDy4vMHMygAiAB4AYgA_SFA92QaF3gBmADtMPLENERXuADYAaXxATdmlzaWJsZV93aW5kb3dfbGlzdNNULA9+EFaAHIASXFJheWNhc3QgLSAgLdQPXIJfgxAQhFdOU0ZsYWdzgB4QY9I4OYaHXxAVTlNJblByZWRpY2F0ZU9wZXJhdG9yo4ZmPdI4OU6Jok490jg5i4xfEBNOU0NvbXBvdW5kUHJlZGljYXRlo4tqPQAIABEAGgAkACkAMgA3AEkATABRAFMAdwB9AIQAngCwALcAuQC7AL0AwgDNAM8A0QDTANoA3ADeAOAA5QDoAOoA7ADuAPcBCwEeATQBNgE4AToBPAFHAVEBYAFzAX8BgQGDAYUBhwGJAZYBmwGdAZ8BpAGvAbgBywHPAdwB5QHqAewB7gHwAfcCAQIDAgUCBwIZAh4CPQJBAkYCVQJZAmECZgJ8AoECmAKfArECswK1Ar0CwgLeAuIC7QL4AwEDCwMaAxwDHQMfAyQDQgNGA1wDYQN5A30DiQOSA5QDlgOYA5oDpQOnA6kDqwOtA7IDtAO2A7gDvwPBA8MD2QPgA+ID5APxA_oEAgQEBAYECwQjBCcELAQvBDQESgAAAAAAAAIBAAAAAAAAAI0AAAAAAAAAAAAAAAAAAARO",
+        "BTTTriggerType" : 624,
+        "BTTTriggerTypeDescriptionReadOnly" : "Please Select a Trigger ",
+        "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+        "BTTUUID" : "8BDACACE-2CD4-4EFA-AC02-C25797BF5C76",
+        "BTTPredefinedActionType" : 366,
+        "BTTPredefinedActionName" : "Empty Placeholder",
+        "BTTEnabled" : 1,
+        "BTTEnabled2" : 1,
+        "BTTOrder" : 0,
+        "BTTAdditionalActions" : [
+          {
+            "BTTActionCategory" : 0,
+            "BTTLastUpdatedAt" : 1723764995.0508928,
+            "BTTTriggerParentUUID" : "8BDACACE-2CD4-4EFA-AC02-C25797BF5C76",
+            "BTTIsPureAction" : true,
+            "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+            "BTTUUID" : "88B9FEB9-B855-449A-9FD2-6BEB07F35AB2",
+            "BTTLayoutIndependentActionChar" : "c",
+            "BTTShortcutToSend" : "56,55,8",
+            "BTTEnabled" : 1,
+            "BTTEnabled2" : 1,
+            "BTTOrder" : 3
+          }
+        ],
+        "BTTKeySequence" : {
+          "BTTPauseAfter" : 0.14903517759562843,
+          "BTTPauseBefore" : 0.15313353825136611,
+          "BTTPauseBetween" : 0.18740354938271606,
+          "BTTCharactersToDeleteAfterwards" : 2,
+          "BTTKeyCount" : 4,
+          "BTTKeySequenceDownKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457792
+            },
+            {
+              "BTTKEYCharacter" : " M",
+              "BTTKEYCode" : 46,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457792
+            }
+          ],
+          "BTTKeySequenceMixedKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457792
+            },
+            {
+              "BTTKEYCharacter" : " M",
+              "BTTKEYCode" : 46,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745457792
+            },
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745457792
+            },
+            {
+              "BTTKEYCharacter" : " M",
+              "BTTKEYCode" : 46,
+              "BTTKEYTime" : 745457792
+            }
+          ],
+          "BTTKeySequenceUpKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745457792
+            },
+            {
+              "BTTKEYCharacter" : " M",
+              "BTTKEYCode" : 46,
+              "BTTKEYTime" : 745457792
+            }
+          ]
+        }
+      },
+      {
+        "BTTActionCategory" : 0,
+        "BTTLastUpdatedAt" : 1723927114.756115,
+        "BTTTriggerConditionsFormatReadOnly" : "NOT (active_app_name == \"Raycast\" OR visible_window_list CONTAINS \"Raycast -  -\")",
+        "BTTTriggerConditionsData" : "YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05TS2V5ZWRBcmNoaXZlctEICVRyb290gAGvECELDBMYHCEpMzQ3PkJHSEtPU1dYW2Nna3B1eXx9gIGFiIpVJG51bGzTDQ4PEBESXxAXTlNDb21wb3VuZFByZWRpY2F0ZVR5cGVfEA9OU1N1YnByZWRpY2F0ZXNWJGNsYXNzEACAAoAg0hQPFRdaTlMub2JqZWN0c6EWgAOAH9MNDg8ZGhIQAoAEgCDSFA8dF6IeH4AFgBaAH9QPIiMkJSYnKF8QEU5TUmlnaHRFeHByZXNzaW9uXxAQTlNMZWZ0RXhwcmVzc2lvbl8QE05TUHJlZGljYXRlT3BlcmF0b3KAFYAQgAaAE9UqKywtDy4vMDEyWU5TT3BlcmFuZF5OU1NlbGVjdG9yTmFtZV8QEE5TRXhwcmVzc2lvblR5cGVbTlNBcmd1bWVudHOACIAHEAOACoAPXHZhbHVlRm9yS2V5OtIsDzU2EAGACdI4OTo7WiRjbGFzc25hbWVYJGNsYXNzZXNfEBBOU1NlbGZFeHByZXNzaW9uozo8PVxOU0V4cHJlc3Npb25YTlNPYmplY3TSFA8_QaFAgAuADtMPLENERUZZTlNLZXlQYXRogA0QCoAMXxAPYWN0aXZlX2FwcF9uYW1l0jg5SUpfEBxOU0tleVBhdGhTcGVjaWZpZXJFeHByZXNzaW9uo0k8PdI4OUxNXk5TTXV0YWJsZUFycmF5o0xOPVdOU0FycmF50jg5UFFfEBNOU0tleVBhdGhFeHByZXNzaW9upFBSPD1fEBROU0Z1bmN0aW9uRXhwcmVzc2lvbtNULA9VEFZfEA9OU0NvbnN0YW50VmFsdWWAEYASV1JheWNhc3TSODlZWl8QGU5TQ29uc3RhbnRWYWx1ZUV4cHJlc3Npb26jWTw91Q9cXV5fYBBhEGJaTlNNb2RpZmllclhOU05lZ2F0ZVlOU09wdGlvbnNeTlNPcGVyYXRvclR5cGWAFAgQBNI4OWRlXxAbTlNFcXVhbGl0eVByZWRpY2F0ZU9wZXJhdG9yo2RmPV8QE05TUHJlZGljYXRlT3BlcmF0b3LSODloaV8QFU5TQ29tcGFyaXNvblByZWRpY2F0ZaNoaj1bTlNQcmVkaWNhdGXUDyIjJCVtbm+AFYAbgBeAHdUqKywtDy4vMHMygAiAB4AYgA_SFA92QaF3gBmADtMPLENERXuADYAaXxATdmlzaWJsZV93aW5kb3dfbGlzdNNULA9+EFaAHIASXFJheWNhc3QgLSAgLdQPXIJfgxAQhFdOU0ZsYWdzgB4QY9I4OYaHXxAVTlNJblByZWRpY2F0ZU9wZXJhdG9yo4ZmPdI4OU6Jok490jg5i4xfEBNOU0NvbXBvdW5kUHJlZGljYXRlo4tqPQAIABEAGgAkACkAMgA3AEkATABRAFMAdwB9AIQAngCwALcAuQC7AL0AwgDNAM8A0QDTANoA3ADeAOAA5QDoAOoA7ADuAPcBCwEeATQBNgE4AToBPAFHAVEBYAFzAX8BgQGDAYUBhwGJAZYBmwGdAZ8BpAGvAbgBywHPAdwB5QHqAewB7gHwAfcCAQIDAgUCBwIZAh4CPQJBAkYCVQJZAmECZgJ8AoECmAKfArECswK1Ar0CwgLeAuIC7QL4AwEDCwMaAxwDHQMfAyQDQgNGA1wDYQN5A30DiQOSA5QDlgOYA5oDpQOnA6kDqwOtA7IDtAO2A7gDvwPBA8MD2QPgA+ID5APxA_oEAgQEBAYECwQjBCcELAQvBDQESgAAAAAAAAIBAAAAAAAAAI0AAAAAAAAAAAAAAAAAAARO",
+        "BTTTriggerType" : 624,
+        "BTTTriggerTypeDescriptionReadOnly" : "Please Select a Trigger ",
+        "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+        "BTTUUID" : "EF43EC1D-5A65-4769-BBFC-2DD8927F44BC",
+        "BTTPredefinedActionType" : 366,
+        "BTTPredefinedActionName" : "Empty Placeholder",
+        "BTTEnabled" : 1,
+        "BTTEnabled2" : 1,
+        "BTTOrder" : 2,
+        "BTTAdditionalActions" : [
+          {
+            "BTTActionCategory" : 0,
+            "BTTLastUpdatedAt" : 1723765180.216006,
+            "BTTTriggerParentUUID" : "EF43EC1D-5A65-4769-BBFC-2DD8927F44BC",
+            "BTTIsPureAction" : true,
+            "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+            "BTTUUID" : "B72320CA-8386-4813-91F3-83461D6C46D8",
+            "BTTLayoutIndependentActionChar" : "p",
+            "BTTShortcutToSend" : "56,55,35",
+            "BTTEnabled" : 1,
+            "BTTEnabled2" : 1,
+            "BTTOrder" : 3
+          }
+        ],
+        "BTTKeySequence" : {
+          "BTTPauseAfter" : 0.14903517759562843,
+          "BTTPauseBefore" : 0.15313353825136611,
+          "BTTPauseBetween" : 0.18740354938271606,
+          "BTTCharactersToDeleteAfterwards" : 2,
+          "BTTKeyCount" : 4,
+          "BTTKeySequenceDownKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745619904
+            },
+            {
+              "BTTKEYCharacter" : " H",
+              "BTTKEYCode" : 4,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745619904
+            }
+          ],
+          "BTTKeySequenceMixedKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745619904
+            },
+            {
+              "BTTKEYCharacter" : " H",
+              "BTTKEYCode" : 4,
+              "BTTKEYDown" : 1,
+              "BTTKEYOrderRelevant" : 1,
+              "BTTKEYRequired" : 1,
+              "BTTKEYTime" : 745619904
+            },
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745619904
+            },
+            {
+              "BTTKEYCharacter" : " H",
+              "BTTKEYCode" : 4,
+              "BTTKEYTime" : 745619904
+            }
+          ],
+          "BTTKeySequenceUpKeys" : [
+            {
+              "BTTKEYCharacter" : " G",
+              "BTTKEYCode" : 5,
+              "BTTKEYTime" : 745619904
+            },
+            {
+              "BTTKEYCharacter" : " H",
+              "BTTKEYCode" : 4,
+              "BTTKEYTime" : 745619904
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
