@@ -2,6 +2,9 @@ import ApplicationServices
 import CoreGraphics
 import Foundation
 
+/// Replacement keys are posted into the HID system, the same layer Carbon hotkeys
+/// read. The event tap still catches the physical key.
+///
 /// Return and keypad Enter follow the Karabiner rule. A release within 200ms,
 /// with no other key, sends Return. Holding it and pressing another key sends
 /// that key with Control+Option+Command. A hold longer than 200ms with no other
@@ -94,26 +97,19 @@ private func postExtraFlags(_ extra: CGEventFlags, enabled: Bool) {
     } else {
         flags.subtract(extra)
     }
-    post { event in
-        event.type = .flagsChanged
-        event.flags = flags
-        event.setIntegerValueField(.keyboardEventKeycode, value: 59)
-    }
+    postHID(type: hidFlagsChanged, key: UInt16(leftControlKey), flags: hidFlags(from: flags))
 }
 
 private func postTap(_ key: Int64, flags: CGEventFlags = []) {
-    let source = CGEventSource(stateID: .hidSystemState)
-    source?.userData = postedByUs
-    guard
-        let down = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(key), keyDown: true),
-        let up = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(key), keyDown: false)
-    else { return }
-    down.flags = flags
-    up.flags = flags
-    down.setIntegerValueField(.eventSourceUserData, value: postedByUs)
-    up.setIntegerValueField(.eventSourceUserData, value: postedByUs)
-    down.post(tap: .cghidEventTap)
-    up.post(tap: .cghidEventTap)
+    let posted = hidFlags(from: flags)
+    let restore = hidFlags(from: CGEventSource.flagsState(.hidSystemState))
+    let code = UInt16(key)
+    postHID(type: hidFlagsChanged, key: code, flags: posted)
+    postHID(type: hidKeyDown, key: code, flags: posted)
+    postHID(type: hidKeyUp, key: code, flags: posted)
+    if restore != posted {
+        postHID(type: hidFlagsChanged, key: code, flags: restore)
+    }
 }
 
 private func releaseCapsLockIfOn() {
@@ -224,7 +220,26 @@ private func endLeftCommand() {
 @_silgen_name("bulkey_hid_post")
 private func enterChordHIDPost(_ type: UInt32, _ key: UInt16, _ flags: UInt32) -> Int32
 
+private var hidInjecting = 0
+private var hidEchoKeys: [Int64] = []
+private var hidReposted: Set<Int64> = []
+
+private func hidFlags(from flags: CGEventFlags) -> UInt32 {
+    UInt32(truncatingIfNeeded: flags.rawValue)
+}
+
 private func postHID(type: UInt32, key: UInt16, flags: UInt32) {
+    hidInjecting += 1
+    hidEchoKeys.append(Int64(key))
+    DispatchQueue.main.async {
+        hidInjecting = max(0, hidInjecting - 1)
+    }
+    let echoed = Int64(key)
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+        if let index = hidEchoKeys.firstIndex(of: echoed) {
+            hidEchoKeys.remove(at: index)
+        }
+    }
     let result = enterChordHIDPost(type, key, flags)
     if result != 0 {
         fputs("bulkey: HID post failed \(result)\n", stderr)
@@ -383,18 +398,7 @@ private func endRightShift() {
 private func postPreviousWindow() {
     var held = CGEventSource.flagsState(.hidSystemState)
     held.formUnion(previousWindowFlags)
-    post { event in
-        event.type = .flagsChanged
-        event.flags = held
-        event.setIntegerValueField(.keyboardEventKeycode, value: rightShiftKey)
-    }
     postTap(nKey, flags: held)
-    held.subtract(previousWindowFlags)
-    post { event in
-        event.type = .flagsChanged
-        event.flags = held
-        event.setIntegerValueField(.keyboardEventKeycode, value: rightShiftKey)
-    }
     fputs("bulkey: right shift tap\n", stderr)
 }
 
@@ -475,19 +479,7 @@ private func aloneTabFlags(extra: CGEventFlags = []) -> CGEventFlags {
 
 private func postShiftTab() {
     let rightShift = CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | 0x00000004)
-    var held = aloneTabFlags(extra: rightShift)
-    post { event in
-        event.type = .flagsChanged
-        event.flags = held
-        event.setIntegerValueField(.keyboardEventKeycode, value: rightShiftKey)
-    }
-    postTap(tabKey, flags: held)
-    held.subtract(rightShift)
-    post { event in
-        event.type = .flagsChanged
-        event.flags = held
-        event.setIntegerValueField(.keyboardEventKeycode, value: rightShiftKey)
-    }
+    postTap(tabKey, flags: aloneTabFlags(extra: rightShift))
 }
 
 private struct EditKey {
@@ -597,6 +589,8 @@ private func clearAllKeyboardState() {
     tabPosted = false
     tabGeneration += 1
     textEditHeld.removeAll()
+    let reposted = hidReposted
+    hidReposted.removeAll()
     emittingSynthetic = false
     gate.phase = .idle
     gate.generation += 1
@@ -609,18 +603,14 @@ private func clearAllKeyboardState() {
             postChord(false)
         }
         for arrow in stuckArrows {
-            let source = CGEventSource(stateID: .hidSystemState)
-            source?.userData = postedByUs
-            CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(arrow), keyDown: false)?
-                .post(tap: .cghidEventTap)
+            postHID(type: hidKeyUp, key: UInt16(arrow), flags: 0)
+        }
+        for key in reposted {
+            postHID(type: hidKeyUp, key: UInt16(key), flags: 0)
         }
         var flags = CGEventSource.flagsState(.hidSystemState)
         flags.subtract([.maskCommand, .maskShift, .maskControl, .maskAlternate])
-        post { event in
-            event.type = .flagsChanged
-            event.flags = flags
-            event.setIntegerValueField(.keyboardEventKeycode, value: escapeKey)
-        }
+        postHID(type: hidFlagsChanged, key: UInt16(escapeKey), flags: hidFlags(from: flags))
     }
 }
 
@@ -726,15 +716,6 @@ private let holdSeconds: Double = {
     return 0.20
 }()
 
-private func post(_ configure: (CGEvent) -> Void) {
-    let source = CGEventSource(stateID: .hidSystemState)
-    source?.userData = postedByUs
-    guard let event = CGEvent(source: source) else { return }
-    configure(event)
-    event.setIntegerValueField(.eventSourceUserData, value: postedByUs)
-    event.post(tap: .cghidEventTap)
-}
-
 private func postChord(_ down: Bool) {
     var flags = CGEventSource.flagsState(.hidSystemState)
     if down {
@@ -742,24 +723,16 @@ private func postChord(_ down: Bool) {
     } else {
         flags.subtract(chord)
     }
-    post { event in
-        event.type = .flagsChanged
-        event.flags = flags
-        event.setIntegerValueField(.keyboardEventKeycode, value: 59)
-    }
+    postHID(type: hidFlagsChanged, key: UInt16(leftControlKey), flags: hidFlags(from: flags))
 }
 
 private func postReturn() {
-    let source = CGEventSource(stateID: .hidSystemState)
-    source?.userData = postedByUs
-    guard
-        let down = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(returnKey), keyDown: true),
-        let up = CGEvent(keyboardEventSource: source, virtualKey: CGKeyCode(returnKey), keyDown: false)
-    else { return }
-    down.flags = []
-    up.flags = []
-    down.post(tap: .cghidEventTap)
-    up.post(tap: .cghidEventTap)
+    let restore = hidFlags(from: CGEventSource.flagsState(.hidSystemState))
+    postHID(type: hidKeyDown, key: UInt16(returnKey), flags: 0)
+    postHID(type: hidKeyUp, key: UInt16(returnKey), flags: 0)
+    if restore != 0 {
+        postHID(type: hidFlagsChanged, key: UInt16(returnKey), flags: restore)
+    }
 }
 
 private func beginChord() {
@@ -790,12 +763,27 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
     }
 
     let keyCode = event.getIntegerValueField(.keyboardEventKeycode)
+    if hidInjecting > 0 || hidEchoKeys.contains(keyCode) {
+        if let index = hidEchoKeys.firstIndex(of: keyCode) {
+            hidEchoKeys.remove(at: index)
+        }
+        return Unmanaged.passUnretained(event)
+    }
     let isReturn = keyCode == returnKey || keyCode == keypadEnter
     let repeatKey = event.getIntegerValueField(.keyboardEventAutorepeat) != 0
 
     if keyCode == escapeKey && type == .keyDown && !repeatKey {
         clearAllKeyboardState()
         return Unmanaged.passUnretained(event)
+    }
+
+    if type == .keyUp, hidReposted.remove(keyCode) != nil {
+        var flags = event.flags
+        if gate.phase == .chord {
+            flags.formUnion(chord)
+        }
+        postHID(type: hidKeyUp, key: UInt16(keyCode), flags: hidFlags(from: flags))
+        return nil
     }
 
     if capsKeys.contains(keyCode) {
@@ -1100,7 +1088,9 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
             beginChord()
         }
         event.flags.formUnion(chord)
-        return Unmanaged.passUnretained(event)
+        hidReposted.insert(keyCode)
+        postHID(type: hidKeyDown, key: UInt16(keyCode), flags: hidFlags(from: event.flags))
+        return nil
     }
 
     if let arrow = arrowByKey[keyCode] {
@@ -1114,10 +1104,12 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
                 heldArrow[keyCode] = arrow
             }
             if let mapped = heldArrow[keyCode] {
-                event.setIntegerValueField(.keyboardEventKeycode, value: mapped)
+                postHID(type: hidKeyDown, key: UInt16(mapped), flags: hidFlags(from: event.flags))
+                return nil
             }
         } else if type == .keyUp, let mapped = heldArrow.removeValue(forKey: keyCode) {
-            event.setIntegerValueField(.keyboardEventKeycode, value: mapped)
+            postHID(type: hidKeyUp, key: UInt16(mapped), flags: hidFlags(from: event.flags))
+            return nil
         }
     }
     return Unmanaged.passUnretained(event)
@@ -1299,9 +1291,5 @@ while !installTap() {
 fputs("bulkey: listening\n", stderr)
 var flags = CGEventSource.flagsState(.hidSystemState)
 flags.subtract([.maskCommand, .maskShift, .maskControl, .maskAlternate])
-post { event in
-    event.type = .flagsChanged
-    event.flags = flags
-    event.setIntegerValueField(.keyboardEventKeycode, value: 59)
-}
+postHID(type: hidFlagsChanged, key: UInt16(leftControlKey), flags: hidFlags(from: flags))
 CFRunLoopRun()
