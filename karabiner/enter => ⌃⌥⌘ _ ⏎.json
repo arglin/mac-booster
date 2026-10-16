@@ -1,0 +1,35 @@
+{
+    "description": "[Enter] == ⌃⌥⌘ | ⏎ (alone)",
+    "manipulators": [
+        {
+            "from": {
+                "key_code": "return_or_enter",
+                "modifiers": {
+                    "optional": [
+                        "any"
+                    ]
+                }
+            },
+            "parameters": {
+                "basic.to_if_alone_timeout_milliseconds": 200
+            },
+            "to": [
+                {
+                    "key_code": "right_control",
+                    "lazy": true,
+                    "modifiers": [
+                        "right_option",
+                        "right_command",
+                        "right_control"
+                    ]
+                }
+            ],
+            "to_if_alone": [
+                {
+                    "key_code": "return_or_enter"
+                }
+            ],
+            "type": "basic"
+        }
+    ]
+}
