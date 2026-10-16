@@ -5,9 +5,9 @@ import Foundation
 /// Replacement keys are posted into the HID system, the same layer Carbon hotkeys
 /// read. The event tap still catches the physical key.
 ///
-/// Return and keypad Enter follow the Karabiner rule. A release within 200ms,
+/// Return and keypad Enter follow the Karabiner rule. A release within 180ms,
 /// with no other key, sends Return. Holding it and pressing another key sends
-/// that key with Control+Option+Command. A hold longer than 200ms with no other
+/// that key with Control+Option+Command. A hold longer than 180ms with no other
 /// key sends nothing. Other modifiers do not block the rule.
 ///
 /// A finger resting in the top-left quarter of the built-in trackpad (a contact,
@@ -178,7 +178,7 @@ private func beginLeftCommand() {
     leftCommandPosted = false
     leftCommandGeneration += 1
     let generation = leftCommandGeneration
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + holdSeconds) {
         guard generation == leftCommandGeneration, leftCommandTracking, !leftCommandUsed else { return }
         holdLeftCommand(on: nil)
     }
@@ -281,7 +281,7 @@ private func beginRightCommand() {
     rightCommandPosted = false
     rightCommandGeneration += 1
     let generation = rightCommandGeneration
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + holdSeconds) {
         guard generation == rightCommandGeneration, rightCommandTracking, !rightCommandUsed else { return }
         holdRightCommand(on: nil)
     }
@@ -354,7 +354,7 @@ private func beginRightShift() {
     rightShiftPosted = false
     rightShiftGeneration += 1
     let generation = rightShiftGeneration
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + holdSeconds) {
         guard generation == rightShiftGeneration, rightShiftTracking, !rightShiftUsed else { return }
         holdRightShift(on: nil)
     }
@@ -410,7 +410,7 @@ private func beginTab(fingers: Int) {
     tabFingers = fingers
     tabGeneration += 1
     let generation = tabGeneration
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+    DispatchQueue.main.asyncAfter(deadline: .now() + holdSeconds) {
         guard generation == tabGeneration, tabTracking, !tabUsed else { return }
         holdTab(on: nil)
     }
@@ -713,7 +713,7 @@ private let holdSeconds: Double = {
     if CommandLine.arguments.count > 1, let ms = Double(CommandLine.arguments[1]), ms > 0 {
         return ms / 1000
     }
-    return 0.20
+    return 0.18
 }()
 
 private func postChord(_ down: Bool) {
