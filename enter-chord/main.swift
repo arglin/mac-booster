@@ -5,10 +5,8 @@ import Foundation
 /// Replacement keys are posted into the HID system, the same layer Carbon hotkeys
 /// read. The event tap still catches the physical key.
 ///
-/// Return and keypad Enter follow the Karabiner rule. A release within 180ms,
-/// with no other key, sends Return. Holding it and pressing another key sends
-/// that key with Control+Option+Command. A hold longer than 180ms with no other
-/// key sends nothing. Other modifiers do not block the rule.
+/// Enter and keypad Enter: a tap sends Return. Holding either one, or pressing
+/// another key while it is down, is Right Option+Right Command+Right Shift.
 ///
 /// A finger resting in the top-left quarter of the built-in trackpad (a contact,
 /// not a click) turns H J K L into Left, Down, Up, and Right. The quarter is the
@@ -435,7 +433,7 @@ private func endTab() {
     tabUsed = false
     tabPosted = false
     tabGeneration += 1
-    if posted {
+    if posted && !returnLayerPosted {
         DispatchQueue.main.async {
             var extra = tabHoldFlags
             if leftCommandPosted || rightCommandPosted {
@@ -456,6 +454,62 @@ private func endTab() {
             postShiftTab()
         }
         fputs("bulkey: tab tap fingers=\(fingers)\n", stderr)
+    }
+}
+
+private var returnTracking = false
+private var returnUsed = false
+private var returnLayerPosted = false
+private var returnGeneration = 0
+
+private func beginReturn() {
+    guard !returnTracking else { return }
+    returnTracking = true
+    returnUsed = false
+    returnLayerPosted = false
+    returnGeneration += 1
+    let generation = returnGeneration
+    DispatchQueue.main.asyncAfter(deadline: .now() + holdSeconds) {
+        guard generation == returnGeneration, returnTracking, !returnUsed else { return }
+        holdReturn(on: nil)
+    }
+}
+
+private func holdReturn(on event: CGEvent?) {
+    guard returnTracking else { return }
+    returnUsed = true
+    if !returnLayerPosted {
+        returnLayerPosted = true
+        DispatchQueue.main.async { postExtraFlags(tabHoldFlags, enabled: true) }
+    }
+    event?.flags.formUnion(tabHoldFlags)
+}
+
+private func endReturn() {
+    guard returnTracking else { return }
+    let posted = returnLayerPosted
+    let used = returnUsed
+    returnTracking = false
+    returnUsed = false
+    returnLayerPosted = false
+    returnGeneration += 1
+    if posted && !tabPosted {
+        DispatchQueue.main.async {
+            var extra = tabHoldFlags
+            if leftCommandPosted || rightCommandPosted {
+                extra.subtract(.maskCommand)
+            }
+            if rightShiftPosted {
+                extra.subtract(.maskShift)
+            }
+            if capsFlagsPosted {
+                extra.subtract(capsModifierFlags())
+            }
+            postExtraFlags(extra, enabled: false)
+        }
+    } else if !used {
+        postReturn()
+        fputs("bulkey: enter tap\n", stderr)
     }
 }
 
@@ -588,6 +642,10 @@ private func clearAllKeyboardState() {
     tabUsed = false
     tabPosted = false
     tabGeneration += 1
+    returnTracking = false
+    returnUsed = false
+    returnLayerPosted = false
+    returnGeneration += 1
     textEditHeld.removeAll()
     let reposted = hidReposted
     hidReposted.removeAll()
@@ -769,7 +827,6 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         }
         return Unmanaged.passUnretained(event)
     }
-    let isReturn = keyCode == returnKey || keyCode == keypadEnter
     let repeatKey = event.getIntegerValueField(.keyboardEventAutorepeat) != 0
 
     if keyCode == escapeKey && type == .keyDown && !repeatKey {
@@ -789,6 +846,9 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
     if capsKeys.contains(keyCode) {
         if type == .keyDown, tabTracking {
             holdTab(on: nil)
+        }
+        if type == .keyDown, returnTracking {
+            holdReturn(on: nil)
         }
         if type == .keyDown {
             if repeatKey || capsMode != .none {
@@ -848,6 +908,9 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         if leftCommandPress, tabTracking {
             holdTab(on: nil)
         }
+        if leftCommandPress, returnTracking {
+            holdReturn(on: nil)
+        }
         let otherModifier = !event.flags.intersection([
             .maskShift, .maskControl, .maskAlternate, .maskSecondaryFn,
         ]).isEmpty || (event.flags.rawValue & 0x10) != 0
@@ -905,6 +968,9 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         let rightCommandPress = type == .keyDown || (type == .flagsChanged && (event.flags.rawValue & 0x10) != 0)
         if rightCommandPress, tabTracking {
             holdTab(on: nil)
+        }
+        if rightCommandPress, returnTracking {
+            holdReturn(on: nil)
         }
         let otherModifier = !event.flags.intersection([
             .maskShift, .maskControl, .maskAlternate, .maskSecondaryFn,
@@ -973,6 +1039,9 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         if rightShiftPress, tabTracking {
             holdTab(on: nil)
         }
+        if rightShiftPress, returnTracking {
+            holdReturn(on: nil)
+        }
         if postingScrollChord || rightCommandLatch || rightShiftLatch {
             return Unmanaged.passUnretained(event)
         }
@@ -1010,6 +1079,9 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
     }
 
     if keyCode == tabKey, type == .keyDown || type == .keyUp {
+        if type == .keyDown, returnTracking {
+            holdReturn(on: nil)
+        }
         let fingers = touchState().total
         if type == .keyDown {
             if repeatKey || tabTracking {
@@ -1032,6 +1104,26 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         holdTab(on: event)
     }
 
+    if keyCode == returnKey || keyCode == keypadEnter {
+        if type == .keyDown {
+            if repeatKey || returnTracking {
+                return nil
+            }
+            beginReturn()
+            return nil
+        }
+        if type == .keyUp {
+            if returnTracking {
+                endReturn()
+            }
+            return nil
+        }
+    }
+
+    if returnTracking, keyCode != returnKey, keyCode != keypadEnter, type == .keyDown || type == .flagsChanged {
+        holdReturn(on: event)
+    }
+
     if type == .keyDown || type == .keyUp, touchState().total == 1 || textEditHeld.contains(keyCode) {
         if type == .keyUp {
             if textEditHeld.remove(keyCode) != nil {
@@ -1051,35 +1143,6 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
             return nil
         } else {
             textEditHeld.remove(keyCode)
-        }
-    }
-
-    if isReturn {
-        if type == .keyDown {
-            if tabTracking {
-                holdTab(on: nil)
-            }
-            if repeatKey || gate.phase != .idle {
-                return nil
-            }
-            gate.phase = .pending
-            gate.generation += 1
-            armHoldTimer()
-            return nil
-        }
-        if type == .keyUp {
-            let phase = gate.phase
-            if phase == .idle {
-                return Unmanaged.passUnretained(event)
-            }
-            gate.phase = .idle
-            gate.generation += 1
-            if phase == .pending {
-                DispatchQueue.main.async { postReturn() }
-            } else if phase == .chord {
-                DispatchQueue.main.async { postChord(false) }
-            }
-            return nil
         }
     }
 
