@@ -15,10 +15,6 @@
               "HIDKeyboardModifierMappingDst": 0x70000002B  <!--> tab <-->
             },
             {
-              "HIDKeyboardModifierMappingSrc": 0x700000039, <!--> caps_lock<-->
-              "HIDKeyboardModifierMappingDst": 0x70000006D <!--> F18, handled by enter-chord <-->
-            },
-            {
               "HIDKeyboardModifierMappingSrc": 0x70000002B, <!--> ralt<-->
               "HIDKeyboardModifierMappingDst": 0x7000000E6 <!--> ralt<-->
             }

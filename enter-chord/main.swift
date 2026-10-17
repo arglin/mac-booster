@@ -1,6 +1,7 @@
 import ApplicationServices
 import CoreGraphics
 import Foundation
+import IOKit.hidsystem
 
 /// Replacement keys are posted into the HID system, the same layer Carbon hotkeys
 /// read. The event tap still catches the physical key.
@@ -33,9 +34,9 @@ import Foundation
 /// Left Shift changes Q, Y, and O. A, I, T, B, E, and G allow Left Shift. Any other
 /// modifier leaves the letter alone.
 ///
-/// Caps Lock: no counted finger, hold is Control+Option+Command and a tap is
-/// Escape. One counted finger, hold is Control+Option+Shift and a tap sends
-/// nothing.
+/// Caps Lock: a tap is Escape. Holding it while pressing another key is
+/// Control+Option+Command. While bulkey runs, Caps Lock is mapped to F18 in the
+/// HID system so macOS never toggles Caps Lock itself.
 
 private let returnKey: Int64 = 36
 private let keypadEnter: Int64 = 76
@@ -47,34 +48,36 @@ private let arrowByKey: [Int64: Int64] = [
     40: 126, // k -> up
 ]
 private var heldArrow: [Int64: Int64] = [:]
-private let capsKeys: Set<Int64> = [57, 79] // Caps Lock, and F18 when hidutil maps Caps Lock there
+private let capsKey: Int64 = 79 // F18, which Caps Lock is mapped to
+private let capsLockUsage: UInt64 = 0x7_0000_0039
+private let f18Usage: UInt64 = 0x7_0000_006D
+private let mappingSrcKey = "HIDKeyboardModifierMappingSrc"
+private let mappingDstKey = "HIDKeyboardModifierMappingDst"
+private let hidEventSystem = IOHIDEventSystemClientCreateSimpleClient(kCFAllocatorDefault)
+
+/// Adds or removes Caps Lock -> F18 in the user key mapping, leaving any other
+/// entries in place.
+private func setCapsLockRemap(_ enabled: Bool) {
+    let key = "UserKeyMapping" as CFString
+    let current = IOHIDEventSystemClientCopyProperty(hidEventSystem, key) as? [[String: Any]] ?? []
+    var mapping = current.filter { entry in
+        (entry[mappingSrcKey] as? NSNumber)?.uint64Value != capsLockUsage
+    }
+    if enabled {
+        mapping.append([mappingSrcKey: capsLockUsage, mappingDstKey: f18Usage])
+    }
+    if !IOHIDEventSystemClientSetProperty(hidEventSystem, key, mapping as CFArray) {
+        fputs("bulkey: could not \(enabled ? "map" : "unmap") Caps Lock\n", stderr)
+    }
+}
 private let escapeKey: Int64 = 53
 private let hyperFlags: CGEventFlags = [.maskControl, .maskAlternate, .maskCommand]
-private let shiftedFlags: CGEventFlags = [.maskControl, .maskAlternate, .maskShift]
-
-private enum CapsMode {
-    case none
-    case hyper
-    case shifted
-}
-
-private var capsMode = CapsMode.none
+private var capsHeld = false
 private var capsUsed = false
 private var capsFlagsPosted = false
 
-private func capsModifierFlags() -> CGEventFlags {
-    switch capsMode {
-    case .none:
-        return []
-    case .hyper:
-        return hyperFlags
-    case .shifted:
-        return shiftedFlags
-    }
-}
-
 private func postExtraFlags(_ extra: CGEventFlags, enabled: Bool) {
-    var flags = CGEventSource.flagsState(.hidSystemState)
+    var flags = currentModifierFlags()
     if enabled {
         flags.formUnion(extra)
     } else {
@@ -101,15 +104,168 @@ private func pass(_ event: CGEvent) -> Unmanaged<CGEvent> {
     return Unmanaged.passUnretained(event)
 }
 
+private struct ModifierKey {
+    let key: UInt16
+    let mask: UInt64
+    let device: UInt64
+    var flags: UInt64 { mask | device }
+}
+
+/// Listed in the order they are pressed.
+private let leftModifierKeys = [
+    ModifierKey(key: 59, mask: CGEventFlags.maskControl.rawValue, device: 0x1),
+    ModifierKey(key: 58, mask: CGEventFlags.maskAlternate.rawValue, device: 0x20),
+    ModifierKey(key: 56, mask: CGEventFlags.maskShift.rawValue, device: 0x2),
+    ModifierKey(key: 55, mask: CGEventFlags.maskCommand.rawValue, device: 0x8),
+    ModifierKey(key: 63, mask: CGEventFlags.maskSecondaryFn.rawValue, device: 0),
+]
+private let rightModifierKey: [UInt64: ModifierKey] = [
+    CGEventFlags.maskControl.rawValue: ModifierKey(key: 62, mask: CGEventFlags.maskControl.rawValue, device: 0x2000),
+    CGEventFlags.maskAlternate.rawValue: ModifierKey(key: 61, mask: CGEventFlags.maskAlternate.rawValue, device: 0x40),
+    CGEventFlags.maskShift.rawValue: ModifierKey(key: 60, mask: CGEventFlags.maskShift.rawValue, device: 0x4),
+    CGEventFlags.maskCommand.rawValue: ModifierKey(key: 54, mask: CGEventFlags.maskCommand.rawValue, device: 0x10),
+]
+private let allModifierBits = (leftModifierKeys + Array(rightModifierKey.values)).reduce(UInt64(0)) { $0 | $1.flags }
+
+/// The physical keys behind `flags`. A modifier with no side bit is the left key.
+private func modifierKeys(in flags: CGEventFlags) -> [ModifierKey] {
+    let raw = flags.rawValue
+    var keys: [ModifierKey] = []
+    for left in leftModifierKeys where raw & left.mask != 0 {
+        let right = rightModifierKey[left.mask]
+        let hasRight = right.map { raw & $0.device != 0 } ?? false
+        if raw & left.device != 0 || !hasRight {
+            keys.append(left)
+        }
+        if hasRight, let right {
+            keys.append(right)
+        }
+    }
+    return keys
+}
+
+private let modifierKeyByCode: [UInt16: ModifierKey] = Dictionary(
+    uniqueKeysWithValues: (leftModifierKeys + Array(rightModifierKey.values)).map { ($0.key, $0) }
+)
+/// Command and Right Shift are handled by bulkey's own tap/hold logic and are
+/// counted through the `...Posted` flags instead.
+private let trackedModifierCodes: Set<UInt16> = [56, 58, 59, 61, 62, 63]
+private var physicalModifiers: Set<UInt16> = []
+
+/// Follows the physical modifier keys. Event flags also carry the modifiers
+/// bulkey is holding, so a set bit is not proof the key went down: a change
+/// with the bit set toggles, one with the bit clear is always a release.
+/// A key press resyncs the sided modifiers from its flags while bulkey holds
+/// nothing, so a missed release heals on the next keystroke. Fn is left out of
+/// the resync: arrow and function keys always carry it.
+private func trackPhysicalModifier(_ type: CGEventType, _ event: CGEvent, keyCode: Int64) {
+    let raw = event.flags.rawValue
+    if type == .flagsChanged {
+        let code = UInt16(truncatingIfNeeded: keyCode)
+        guard trackedModifierCodes.contains(code), let modifier = modifierKeyByCode[code] else { return }
+        let bitSet = modifier.device != 0 ? raw & modifier.device != 0 : event.flags.contains(.maskSecondaryFn)
+        if bitSet && !physicalModifiers.contains(code) {
+            physicalModifiers.insert(code)
+        } else {
+            physicalModifiers.remove(code)
+        }
+    } else if type == .keyDown, !bulkeyHoldsModifiers() {
+        for code in trackedModifierCodes {
+            guard let modifier = modifierKeyByCode[code], modifier.device != 0 else { continue }
+            if raw & modifier.device != 0 {
+                physicalModifiers.insert(code)
+            } else {
+                physicalModifiers.remove(code)
+            }
+        }
+    }
+}
+
+private func bulkeyHoldsModifiers() -> Bool {
+    leftCommandPosted || rightCommandPosted || rightShiftPosted || capsFlagsPosted
+        || tabPosted || returnLayerPosted || sequenceInFlight
+}
+
+/// The modifiers held right now: physical keys plus the holds bulkey posted.
+/// Read from bulkey's own state, because the HID state can still show a
+/// modifier bulkey released a moment ago, and restoring it would leave it stuck.
+private func currentModifierFlags() -> CGEventFlags {
+    var flags = CGEventFlags(rawValue: physicalModifiers.reduce(UInt64(0)) { raw, code in
+        raw | (modifierKeyByCode[code]?.flags ?? 0)
+    })
+    if leftCommandPosted || rightCommandPosted {
+        flags.formUnion(.maskCommand)
+    }
+    if rightShiftPosted {
+        flags.formUnion(numLineFlags)
+    }
+    if capsFlagsPosted {
+        flags.formUnion(hyperFlags)
+    }
+    if tabPosted || returnLayerPosted {
+        flags.formUnion(tabHoldFlags)
+    }
+    if CGEventSource.flagsState(.hidSystemState).contains(.maskAlphaShift) {
+        flags.formUnion(.maskAlphaShift)
+    }
+    return flags
+}
+
+/// Presses and releases modifier keys one at a time, as typing them would.
+private func postModifierChange(from: CGEventFlags, to: CGEventFlags) {
+    let target = modifierKeys(in: to)
+    var held = modifierKeys(in: from)
+    let others = from.rawValue & ~allModifierBits
+    func heldFlags() -> UInt32 {
+        hidFlags(from: CGEventFlags(rawValue: held.reduce(others) { $0 | $1.flags }))
+    }
+    for key in held.reversed() where !target.contains(where: { $0.key == key.key }) {
+        held.removeAll { $0.key == key.key }
+        postHID(type: hidFlagsChanged, key: key.key, flags: heldFlags())
+    }
+    for key in target where !held.contains(where: { $0.key == key.key }) {
+        held.append(key)
+        postHID(type: hidFlagsChanged, key: key.key, flags: heldFlags())
+    }
+}
+
 private func postTap(_ key: Int64, flags: CGEventFlags = []) {
-    let posted = hidFlags(from: flags)
-    let restore = hidFlags(from: (tabPosted || returnLayerPosted) ? tabHoldFlags : CGEventSource.flagsState(.hidSystemState))
-    let code = UInt16(key)
-    postHID(type: hidFlagsChanged, key: code, flags: posted)
-    postHID(type: hidKeyDown, key: code, flags: posted)
-    postHID(type: hidKeyUp, key: code, flags: posted)
-    if restore != posted {
-        postHID(type: hidFlagsChanged, key: code, flags: restore)
+    postSequence([EditKey(key: key, flags: flags)])
+}
+
+/// Editors such as Electron apps move the cursor asynchronously, so a key sent
+/// immediately after another can act on the old cursor position.
+private let sequenceStepDelay: Double = 0.005
+/// True from the first key of a sequence until its modifiers are released.
+private var sequenceInFlight = false
+
+/// Types the keys in order, moving straight from one key's modifiers to the
+/// next. The held modifiers are read once: right after posting, the HID state
+/// may not yet show the release of the previous key's modifiers.
+private func postSequence(_ steps: [EditKey]) {
+    guard !steps.isEmpty else { return }
+    sequenceInFlight = true
+    let base = (tabPosted || returnLayerPosted) ? tabHoldFlags : currentModifierFlags()
+    var previous = base
+    for (index, step) in steps.enumerated() {
+        let from = previous
+        let isLast = index == steps.count - 1
+        let send = {
+            let code = UInt16(step.key)
+            postModifierChange(from: from, to: step.flags)
+            postHID(type: hidKeyDown, key: code, flags: hidFlags(from: step.flags))
+            postHID(type: hidKeyUp, key: code, flags: hidFlags(from: step.flags))
+            if isLast {
+                postModifierChange(from: step.flags, to: base)
+                sequenceInFlight = false
+            }
+        }
+        if index == 0 {
+            send()
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + sequenceStepDelay * Double(index), execute: send)
+        }
+        previous = step.flags
     }
 }
 
@@ -392,7 +548,7 @@ private func endRightShift() {
 }
 
 private func postPreviousWindow() {
-    var held = CGEventSource.flagsState(.hidSystemState)
+    var held = currentModifierFlags()
     held.formUnion(previousWindowFlags)
     postTap(nKey, flags: held)
     fputs("bulkey: right shift tap\n", stderr)
@@ -497,16 +653,16 @@ private func releaseLayerFlags() {
         extra.subtract(.maskShift)
     }
     if capsFlagsPosted {
-        extra.subtract(capsModifierFlags())
+        extra.subtract(hyperFlags)
     }
     postExtraFlags(extra, enabled: false)
 }
 
 private func aloneTabFlags(extra: CGEventFlags = []) -> CGEventFlags {
-    var flags = CGEventSource.flagsState(.hidSystemState)
+    var flags = currentModifierFlags()
     flags.formUnion(extra)
-    if capsMode != .none {
-        flags.formUnion(capsModifierFlags())
+    if capsHeld {
+        flags.formUnion(hyperFlags)
     }
     if leftCommandPosted || rightCommandPosted {
         flags.formUnion(.maskCommand)
@@ -530,6 +686,7 @@ private struct EditKey {
 private let editCommand = CGEventFlags(rawValue: CGEventFlags.maskCommand.rawValue | 0x00000008)
 private let editShift = CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | 0x00000002)
 private let editOption = CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | 0x00000020)
+private let editOptionFn = CGEventFlags(rawValue: editOption.rawValue | CGEventFlags.maskSecondaryFn.rawValue)
 private let editControl = CGEventFlags(rawValue: CGEventFlags.maskControl.rawValue | 0x00000001)
 private let editCommandShift = CGEventFlags(rawValue:
     CGEventFlags.maskCommand.rawValue | 0x00000008 | CGEventFlags.maskShift.rawValue | 0x00000002
@@ -537,8 +694,14 @@ private let editCommandShift = CGEventFlags(rawValue:
 private let editControlShift = CGEventFlags(rawValue:
     CGEventFlags.maskControl.rawValue | 0x00000001 | CGEventFlags.maskShift.rawValue | 0x00000002
 )
-private var textEditHeld: Set<Int64> = []
-
+/// Text-edit keys still down, with the steps chosen when each was pressed.
+/// Repeats replay those steps: a repeat can carry modifiers bulkey itself is
+/// holding mid-sequence, such as Command, and must never reach the app as
+/// Command+Q.
+private var textEditHeld: [Int64: [EditKey]] = [:]
+/// Text-edit keys that repeat while held: S, X, Z, V, W, B, E. The rest fire
+/// once per press; their steps hold Command, and repeating them can leave it stuck.
+private let repeatableTextEditKeys: Set<Int64> = [1, 7, 6, 9, 13, 11, 14]
 private func textEditSteps(keyCode: Int64, flags: CGEventFlags) -> [EditKey]? {
     if !flags.intersection([.maskControl, .maskAlternate, .maskCommand, .maskSecondaryFn]).isEmpty {
         return nil
@@ -557,8 +720,8 @@ private func textEditSteps(keyCode: Int64, flags: CGEventFlags) -> [EditKey]? {
         return [EditKey(key: 51, flags: editOption)]
     case 9 where !shift: // v: delete next word
         return [EditKey(key: 117, flags: editOption)]
-    case 13 where !shift: // w: previous word, delete next word
-        return [EditKey(key: 123, flags: editOption), EditKey(key: 117, flags: editOption)]
+    case 13 where !shift: // w: Option+Left, then Option+Fn+Backspace (Option+Forward Delete)
+        return [EditKey(key: 123, flags: editOption), EditKey(key: 117, flags: editOptionFn)]
     case 0: // a, shift optional: end of line
         return [EditKey(key: 124, flags: editCommand)]
     case 34: // i, shift optional: start of line
@@ -603,9 +766,8 @@ private func textEditSteps(keyCode: Int64, flags: CGEventFlags) -> [EditKey]? {
 
 private func clearAllKeyboardState() {
     let capsPosted = capsFlagsPosted
-    let capsExtra = capsModifierFlags()
     let stuckArrows = Array(heldArrow.values)
-    capsMode = .none
+    capsHeld = false
     capsUsed = false
     capsFlagsPosted = false
     leftCommandTracking = false
@@ -635,26 +797,23 @@ private func clearAllKeyboardState() {
     heldArrow.removeAll()
     DispatchQueue.main.async {
         if capsPosted {
-            postExtraFlags(capsExtra, enabled: false)
+            postExtraFlags(hyperFlags, enabled: false)
         }
         for arrow in stuckArrows {
             postHID(type: hidKeyUp, key: UInt16(arrow), flags: 0)
         }
-        var flags = CGEventSource.flagsState(.hidSystemState)
-        flags.subtract([.maskCommand, .maskShift, .maskControl, .maskAlternate])
-        postHID(type: hidFlagsChanged, key: UInt16(escapeKey), flags: hidFlags(from: flags))
+        postHID(type: hidFlagsChanged, key: UInt16(escapeKey), flags: hidFlags(from: currentModifierFlags()))
     }
 }
 
 private func engageCapsModifiers(on event: CGEvent?) {
-    guard capsMode != .none else { return }
+    guard capsHeld else { return }
     capsUsed = true
-    let extra = capsModifierFlags()
     if !capsFlagsPosted {
         capsFlagsPosted = true
-        DispatchQueue.main.async { postExtraFlags(extra, enabled: true) }
+        DispatchQueue.main.async { postExtraFlags(hyperFlags, enabled: true) }
     }
-    event?.flags.formUnion(extra)
+    event?.flags.formUnion(hyperFlags)
 }
 private struct MTPoint {
     var x: Float
@@ -738,12 +897,7 @@ private let holdSeconds: Double = {
 }()
 
 private func postReturn() {
-    let restore = hidFlags(from: CGEventSource.flagsState(.hidSystemState))
-    postHID(type: hidKeyDown, key: UInt16(returnKey), flags: 0)
-    postHID(type: hidKeyUp, key: UInt16(returnKey), flags: 0)
-    if restore != 0 {
-        postHID(type: hidFlagsChanged, key: UInt16(returnKey), flags: restore)
-    }
+    postTap(returnKey)
 }
 
 private let callback: CGEventTapCallBack = { _, type, event, _ in
@@ -761,69 +915,43 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         }
         return pass(event)
     }
+    trackPhysicalModifier(type, event, keyCode: keyCode)
     let repeatKey = event.getIntegerValueField(.keyboardEventAutorepeat) != 0
-
     if keyCode == escapeKey && type == .keyDown && !repeatKey {
         clearAllKeyboardState()
         return pass(event)
     }
 
-    if capsKeys.contains(keyCode) {
-        if type == .keyDown, tabTracking {
-            holdTab(on: nil)
-        }
-        if type == .keyDown, returnTracking {
-            holdReturn(on: nil)
-        }
+    if keyCode == capsKey {
         if type == .keyDown {
-            if repeatKey || capsMode != .none {
+            if repeatKey || capsHeld {
                 return nil
             }
-            let fingers = touchState().total
-            // F18, which is what Caps Lock is mapped to, arrives with the Fn flag set.
-            // That is not the user holding Fn.
-            let heldModifiers = event.flags.intersection([
-                .maskShift, .maskControl, .maskAlternate, .maskCommand,
-            ])
-            if fingers == 0 && heldModifiers.isEmpty {
-                capsMode = .hyper
-            } else if fingers == 1 && heldModifiers.isEmpty {
-                capsMode = .shifted
-            } else {
-                fputs(
-                    "bulkey: caps skipped fingers=\(fingers) flags=\(event.flags.rawValue)\n",
-                    stderr
-                )
-                return pass(event)
-            }
+            capsHeld = true
             capsUsed = false
             capsFlagsPosted = false
-            fputs("bulkey: caps fingers=\(fingers) mode=\(capsMode)\n", stderr)
+            fputs("bulkey: caps down\n", stderr)
             releaseCapsLockIfOn()
             return nil
         }
         if type == .keyUp {
-            let mode = capsMode
-            if mode == .none {
-                return pass(event)
-            }
+            guard capsHeld else { return pass(event) }
             let used = capsUsed
             let posted = capsFlagsPosted
-            let extra = capsModifierFlags()
-            capsMode = .none
+            capsHeld = false
             capsUsed = false
             capsFlagsPosted = false
             if posted {
-                DispatchQueue.main.async { postExtraFlags(extra, enabled: false) }
-            } else if mode == .hyper && !used {
+                DispatchQueue.main.async { postExtraFlags(hyperFlags, enabled: false) }
+            } else if !used {
                 DispatchQueue.main.async { postTap(escapeKey) }
             }
-            fputs("bulkey: caps up mode=\(mode) used=\(used)\n", stderr)
+            fputs("bulkey: caps up used=\(used)\n", stderr)
             return nil
         }
     }
 
-    if !capsKeys.contains(keyCode), keyCode != leftCommandKey, keyCode != rightCommandKey, capsMode != .none, type == .keyDown {
+    if keyCode != capsKey, keyCode != leftCommandKey, keyCode != rightCommandKey, capsHeld, type == .keyDown {
         engageCapsModifiers(on: event)
     }
 
@@ -839,7 +967,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         let otherModifier = !event.flags.intersection([
             .maskShift, .maskControl, .maskAlternate, .maskSecondaryFn,
         ]).isEmpty || (event.flags.rawValue & 0x10) != 0
-            || rightCommandTracking || rightShiftTracking || capsMode != .none
+            || rightCommandTracking || rightShiftTracking || capsHeld
         if !leftCommandTracking && otherModifier {
             if rightCommandTracking {
                 holdRightCommand(on: nil)
@@ -847,7 +975,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
             if rightShiftTracking {
                 holdRightShift(on: nil)
             }
-            if capsMode != .none {
+            if capsHeld {
                 engageCapsModifiers(on: nil)
             }
             return pass(event)
@@ -900,7 +1028,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         let otherModifier = !event.flags.intersection([
             .maskShift, .maskControl, .maskAlternate, .maskSecondaryFn,
         ]).isEmpty || (event.flags.rawValue & 0x08) != 0
-            || leftCommandTracking || rightShiftTracking || capsMode != .none
+            || leftCommandTracking || rightShiftTracking || capsHeld
         if !rightCommandTracking && otherModifier {
             if leftCommandTracking {
                 holdLeftCommand(on: nil)
@@ -908,7 +1036,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
             if rightShiftTracking {
                 holdRightShift(on: nil)
             }
-            if capsMode != .none {
+            if capsHeld {
                 engageCapsModifiers(on: nil)
             }
             return pass(event)
@@ -1046,22 +1174,24 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         holdReturn(on: event)
     }
 
-    if type == .keyDown || type == .keyUp, touchState().total == 1 || textEditHeld.contains(keyCode) {
+    if type == .keyDown || type == .keyUp, touchState().total == 1 || textEditHeld[keyCode] != nil {
         if type == .keyUp {
-            if textEditHeld.remove(keyCode) != nil {
+            if textEditHeld.removeValue(forKey: keyCode) != nil {
                 return nil
             }
-            } else if !(tabPosted || returnLayerPosted), touchState().total == 1, let steps = textEditSteps(keyCode: keyCode, flags: event.flags) {
-            textEditHeld.insert(keyCode)
-            if !repeatKey {
-                fputs("bulkey: text edit \(keyCode)\n", stderr)
-            }
-            for step in steps {
-                postTap(step.key, flags: step.flags)
+        } else if repeatKey, let steps = textEditHeld[keyCode] {
+            if !sequenceInFlight && repeatableTextEditKeys.contains(keyCode) {
+                postSequence(steps)
             }
             return nil
+        } else if !repeatKey, !(tabPosted || returnLayerPosted), touchState().total == 1,
+            let steps = textEditSteps(keyCode: keyCode, flags: event.flags) {
+            textEditHeld[keyCode] = steps
+            fputs("bulkey: text edit \(keyCode)\n", stderr)
+            postSequence(steps)
+            return nil
         } else {
-            textEditHeld.remove(keyCode)
+            textEditHeld.removeValue(forKey: keyCode)
         }
     }
 
@@ -1276,8 +1406,8 @@ while !installTap() {
     CFRunLoopRunInMode(.defaultMode, 1.0, false)
 }
 
+setCapsLockRemap(true)
 fputs("bulkey: listening\n", stderr)
-var flags = CGEventSource.flagsState(.hidSystemState)
-flags.subtract([.maskCommand, .maskShift, .maskControl, .maskAlternate])
-postHID(type: hidFlagsChanged, key: UInt16(leftControlKey), flags: hidFlags(from: flags))
+postHID(type: hidFlagsChanged, key: UInt16(leftControlKey), flags: hidFlags(from: currentModifierFlags()))
 CFRunLoopRun()
+setCapsLockRemap(false)
