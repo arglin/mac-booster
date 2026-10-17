@@ -39,22 +39,6 @@ import Foundation
 
 private let returnKey: Int64 = 36
 private let keypadEnter: Int64 = 76
-private let postedByUs: Int64 = 0x454E5401
-private let chord: CGEventFlags = [.maskControl, .maskAlternate, .maskCommand]
-
-private enum Phase {
-    case idle
-    case pending
-    case held
-    case chord
-}
-
-private final class Gate {
-    var phase = Phase.idle
-    var generation = 0
-}
-
-private let gate = Gate()
 private var tapPort: CFMachPort?
 private let arrowByKey: [Int64: Int64] = [
     4: 123, // h -> left
@@ -144,9 +128,6 @@ private let leftShiftKey: Int64 = 56
 private let rightShiftKey: Int64 = 60
 private let leftOptionKey: Int64 = 58
 private let leftControlKey: Int64 = 59
-private let leftShiftFlag = CGEventFlags(rawValue: CGEventFlags.maskShift.rawValue | 0x00000002)
-private let leftControlFlag = CGEventFlags(rawValue: CGEventFlags.maskControl.rawValue | 0x00000001)
-private let leftOptionFlag = CGEventFlags(rawValue: CGEventFlags.maskAlternate.rawValue | 0x00000020)
 
 private var leftCommandTracking = false
 private var leftCommandUsed = false
@@ -186,7 +167,6 @@ private let tabHoldFlags = CGEventFlags(rawValue:
     CGEventFlags.maskAlternate.rawValue | 0x00000020 |
     CGEventFlags.maskShift.rawValue | 0x00000002
 )
-private var emittingSynthetic = false
 
 private func beginLeftCommand() {
     guard !leftCommandTracking else { return }
@@ -239,7 +219,6 @@ private func enterChordHIDPost(_ type: UInt32, _ key: UInt16, _ flags: UInt32) -
 
 private var hidInjecting = 0
 private var hidEchoKeys: [Int64] = []
-private var hidReposted: Set<Int64> = []
 
 private func hidFlags(from flags: CGEventFlags) -> UInt32 {
     UInt32(truncatingIfNeeded: flags.rawValue)
@@ -453,19 +432,7 @@ private func endTab() {
     tabPosted = false
     tabGeneration += 1
     if posted && !returnLayerPosted {
-        DispatchQueue.main.async {
-            var extra = tabHoldFlags
-            if leftCommandPosted || rightCommandPosted {
-                extra.subtract(.maskCommand)
-            }
-            if rightShiftPosted {
-                extra.subtract(.maskShift)
-            }
-            if capsFlagsPosted {
-                extra.subtract(capsModifierFlags())
-            }
-            postExtraFlags(extra, enabled: false)
-        }
+        DispatchQueue.main.async { releaseLayerFlags() }
     } else if !used {
         if fingers == 0 {
             postTap(tabKey, flags: aloneTabFlags())
@@ -513,23 +480,26 @@ private func endReturn() {
     returnLayerPosted = false
     returnGeneration += 1
     if posted && !tabPosted {
-        DispatchQueue.main.async {
-            var extra = tabHoldFlags
-            if leftCommandPosted || rightCommandPosted {
-                extra.subtract(.maskCommand)
-            }
-            if rightShiftPosted {
-                extra.subtract(.maskShift)
-            }
-            if capsFlagsPosted {
-                extra.subtract(capsModifierFlags())
-            }
-            postExtraFlags(extra, enabled: false)
-        }
+        DispatchQueue.main.async { releaseLayerFlags() }
     } else if !used {
         postReturn()
         fputs("bulkey: enter tap\n", stderr)
     }
+}
+
+/// Lifts the Tab and Enter layer, keeping any modifier another held key still owns.
+private func releaseLayerFlags() {
+    var extra = tabHoldFlags
+    if leftCommandPosted || rightCommandPosted {
+        extra.subtract(.maskCommand)
+    }
+    if rightShiftPosted {
+        extra.subtract(.maskShift)
+    }
+    if capsFlagsPosted {
+        extra.subtract(capsModifierFlags())
+    }
+    postExtraFlags(extra, enabled: false)
 }
 
 private func aloneTabFlags(extra: CGEventFlags = []) -> CGEventFlags {
@@ -537,9 +507,6 @@ private func aloneTabFlags(extra: CGEventFlags = []) -> CGEventFlags {
     flags.formUnion(extra)
     if capsMode != .none {
         flags.formUnion(capsModifierFlags())
-    }
-    if gate.phase == .chord {
-        flags.formUnion(chord)
     }
     if leftCommandPosted || rightCommandPosted {
         flags.formUnion(.maskCommand)
@@ -637,7 +604,6 @@ private func textEditSteps(keyCode: Int64, flags: CGEventFlags) -> [EditKey]? {
 private func clearAllKeyboardState() {
     let capsPosted = capsFlagsPosted
     let capsExtra = capsModifierFlags()
-    let enterPosted = gate.phase == .chord
     let stuckArrows = Array(heldArrow.values)
     capsMode = .none
     capsUsed = false
@@ -666,24 +632,13 @@ private func clearAllKeyboardState() {
     returnLayerPosted = false
     returnGeneration += 1
     textEditHeld.removeAll()
-    let reposted = hidReposted
-    hidReposted.removeAll()
-    emittingSynthetic = false
-    gate.phase = .idle
-    gate.generation += 1
     heldArrow.removeAll()
     DispatchQueue.main.async {
         if capsPosted {
             postExtraFlags(capsExtra, enabled: false)
         }
-        if enterPosted {
-            postChord(false)
-        }
         for arrow in stuckArrows {
             postHID(type: hidKeyUp, key: UInt16(arrow), flags: 0)
-        }
-        for key in reposted {
-            postHID(type: hidKeyUp, key: UInt16(key), flags: 0)
         }
         var flags = CGEventSource.flagsState(.hidSystemState)
         flags.subtract([.maskCommand, .maskShift, .maskControl, .maskAlternate])
@@ -751,32 +706,21 @@ private func isIgnoredSide(x: Float) -> Bool {
     x < 0.25 || x >= 0.75
 }
 
-private func countedFingerCount(touches: UnsafeMutableRawPointer?, count: Int) -> Int {
-    guard let touches, count > 0, count < 16 else { return 0 }
+private func countTouches(_ touches: UnsafeMutableRawPointer?, count: Int) -> DeviceTouches {
+    var result = DeviceTouches(total: 0, topLeft: 0)
+    guard let touches, count > 0, count < 16 else { return result }
     let stride = MemoryLayout<MTTouch>.stride
-    var counted = 0
     for index in 0..<count {
-        let touch = touches.advanced(by: index * stride).load(as: MTTouch.self)
-        let point = touch.normalized.position
-        if !isIgnoredSide(x: point.x) {
-            counted += 1
+        let point = touches.advanced(by: index * stride).load(as: MTTouch.self).normalized.position
+        if isIgnoredSide(x: point.x) {
+            continue
+        }
+        result.total += 1
+        if isTopLeftQuarter(x: point.x, y: point.y) {
+            result.topLeft += 1
         }
     }
-    return counted
-}
-
-private func topLeftCount(touches: UnsafeMutableRawPointer?, count: Int) -> Int {
-    guard let touches, count > 0, count < 16 else { return 0 }
-    let stride = MemoryLayout<MTTouch>.stride
-    var inside = 0
-    for index in 0..<count {
-        let touch = touches.advanced(by: index * stride).load(as: MTTouch.self)
-        let point = touch.normalized.position
-        if !isIgnoredSide(x: point.x) && isTopLeftQuarter(x: point.x, y: point.y) {
-            inside += 1
-        }
-    }
-    return inside
+    return result
 }
 
 private func touchState() -> DeviceTouches {
@@ -793,16 +737,6 @@ private let holdSeconds: Double = {
     return 0.18
 }()
 
-private func postChord(_ down: Bool) {
-    var flags = CGEventSource.flagsState(.hidSystemState)
-    if down {
-        flags.formUnion(chord)
-    } else {
-        flags.subtract(chord)
-    }
-    postHID(type: hidFlagsChanged, key: UInt16(leftControlKey), flags: hidFlags(from: flags))
-}
-
 private func postReturn() {
     let restore = hidFlags(from: CGEventSource.flagsState(.hidSystemState))
     postHID(type: hidKeyDown, key: UInt16(returnKey), flags: 0)
@@ -812,30 +746,11 @@ private func postReturn() {
     }
 }
 
-private func beginChord() {
-    guard gate.phase == .pending || gate.phase == .held else { return }
-    gate.phase = .chord
-    gate.generation += 1
-    DispatchQueue.main.async { postChord(true) }
-}
-
-private func armHoldTimer() {
-    let generation = gate.generation
-    DispatchQueue.main.asyncAfter(deadline: .now() + holdSeconds) {
-        guard gate.generation == generation, gate.phase == .pending else { return }
-        gate.phase = .held
-    }
-}
-
 private let callback: CGEventTapCallBack = { _, type, event, _ in
     if type == .tapDisabledByTimeout || type == .tapDisabledByUserInput {
         if let tapPort {
             CGEvent.tapEnable(tap: tapPort, enable: true)
         }
-        return pass(event)
-    }
-
-    if emittingSynthetic || event.getIntegerValueField(.eventSourceUserData) == postedByUs {
         return pass(event)
     }
 
@@ -851,15 +766,6 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
     if keyCode == escapeKey && type == .keyDown && !repeatKey {
         clearAllKeyboardState()
         return pass(event)
-    }
-
-    if type == .keyUp, hidReposted.remove(keyCode) != nil {
-        var flags = event.flags
-        if gate.phase == .chord {
-            flags.formUnion(chord)
-        }
-        postHID(type: hidKeyUp, key: UInt16(keyCode), flags: hidFlags(from: flags))
-        return nil
     }
 
     if capsKeys.contains(keyCode) {
@@ -1104,12 +1010,9 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         let fingers = touchState().total
         if type == .keyDown {
             if repeatKey || tabTracking {
-                return tabTracking ? nil : Unmanaged.passUnretained(event)
+                return tabTracking ? nil : pass(event)
             }
             if fingers < 2 {
-                if gate.phase == .pending || gate.phase == .held {
-                    beginChord()
-                }
                 beginTab(fingers: fingers)
                 return nil
             }
@@ -1149,9 +1052,6 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
                 return nil
             }
             } else if !(tabPosted || returnLayerPosted), touchState().total == 1, let steps = textEditSteps(keyCode: keyCode, flags: event.flags) {
-            if gate.phase == .pending || gate.phase == .held {
-                beginChord()
-            }
             textEditHeld.insert(keyCode)
             if !repeatKey {
                 fputs("bulkey: text edit \(keyCode)\n", stderr)
@@ -1163,16 +1063,6 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         } else {
             textEditHeld.remove(keyCode)
         }
-    }
-
-    if type == .keyDown, gate.phase == .pending || gate.phase == .held || gate.phase == .chord {
-        if gate.phase != .chord {
-            beginChord()
-        }
-        event.flags.formUnion(chord)
-        hidReposted.insert(keyCode)
-        postHID(type: hidKeyDown, key: UInt16(keyCode), flags: hidFlags(from: event.flags))
-        return nil
     }
 
     if (tabPosted || returnLayerPosted),
@@ -1191,7 +1081,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         if type == .keyDown {
             let freshPress = !repeatKey && heldArrow[keyCode] == nil
             let touches = touchState()
-            if freshPress && blocked.isEmpty && gate.phase == .idle && touches.topLeft > 0 {
+            if freshPress && blocked.isEmpty && touches.topLeft > 0 {
                 heldArrow[keyCode] = arrow
             }
             if let mapped = heldArrow[keyCode] {
@@ -1215,15 +1105,14 @@ private let contactFrame: @convention(c) (
 ) -> Int32 = { device, touches, numTouches, _, _ in
     let key = device.map { UInt(bitPattern: $0) } ?? 0
     let count = Int(max(numTouches, 0))
-    let topLeft = topLeftCount(touches: touches, count: count)
-    let counted = countedFingerCount(touches: touches, count: count)
+    let counts = countTouches(touches, count: count)
     var sample = ""
     if let touches, count > 0 {
         let touch = touches.load(as: MTTouch.self)
         sample = String(format: " x=%.2f y=%.2f", touch.normalized.position.x, touch.normalized.position.y)
     }
     touchLock.lock()
-    touchesByDevice[key] = DeviceTouches(total: counted, topLeft: topLeft)
+    touchesByDevice[key] = counts
     let total = touchesByDevice.values.reduce(0) { $0 + $1.total }
     let zone = touchesByDevice.values.reduce(0) { $0 + $1.topLeft }
     touchLock.unlock()
