@@ -1,4 +1,4 @@
 .DS_Store
 .idea/
-enter-chord/bulkey
-enter-chord/*.o
+bulkey/bulkey
+bulkey/*.o
