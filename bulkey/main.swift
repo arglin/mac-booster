@@ -7,7 +7,8 @@ import IOKit.hidsystem
 /// read. The event tap still catches the physical key.
 ///
 /// Enter, keypad Enter, and Backslash: a tap sends Return. Holding any of them, or
-/// pressing another key while it is down, is Left Control+Left Shift+Left Command.
+/// pressing another key while it is down, is Left Option+Left Command+Left Shift,
+/// and those three stay down until the key is released.
 ///
 /// If a modifier is already down when one of them is pressed, it passes through
 /// unchanged.
@@ -27,13 +28,13 @@ import IOKit.hidsystem
 /// or pressing another key while it is down, is Right Command. If another
 /// modifier is already down, Right Command is left unchanged.
 ///
-/// Right Shift: a tap sends Right Command+Right Option+Right Shift+N. Holding it,
-/// or pressing another key while it is down, is Left Option+Left Command+Left Shift,
+/// Right Shift: a tap sends Left Control+Left Shift+Left Command+G. Holding it,
+/// or pressing another key while it is down, is Left Control+Left Shift+Left Command,
 /// and those three stay down until Right Shift is released.
 ///
 /// Tab: with no counted finger, a tap is Tab. With one counted finger, a tap is
 /// Right Shift+Tab. Holding it, or pressing another key while it is down, is
-/// Left Option+Left Command+Left Shift, and those three stay down until Tab is
+/// Left Control+Left Option+Left Shift, and those three stay down until Tab is
 /// released. Two or more counted fingers, or a modifier already down, leave Tab
 /// alone.
 ///
@@ -107,8 +108,8 @@ private func postExactFlags(_ flags: CGEventFlags) {
 private let modifierKeyCodes: Set<Int64> = [54, 55, 56, 58, 59, 60, 61, 62, 63]
 
 private func pass(_ event: CGEvent) -> Unmanaged<CGEvent> {
-    if tabPosted || rightShiftPosted {
-        event.flags = tabHoldFlags
+    if layerActive {
+        event.flags = layerFlags
     }
     return Unmanaged.passUnretained(event)
 }
@@ -205,15 +206,10 @@ private func currentModifierFlags() -> CGEventFlags {
     if leftCommandPosted || rightCommandPosted {
         flags.formUnion(.maskCommand)
     }
-    if returnPosted {
-        flags.formUnion(numLineFlags)
-    }
     if capsFlagsPosted {
         flags.formUnion(hyperFlags)
     }
-    if tabPosted || rightShiftPosted {
-        flags.formUnion(tabHoldFlags)
-    }
+    flags.formUnion(layerFlags)
     if CGEventSource.flagsState(.hidSystemState).contains(.maskAlphaShift) {
         flags.formUnion(.maskAlphaShift)
     }
@@ -254,7 +250,7 @@ private var sequenceInFlight = false
 private func postSequence(_ steps: [EditKey]) {
     guard !steps.isEmpty else { return }
     sequenceInFlight = true
-    let base = (tabPosted || rightShiftPosted) ? tabHoldFlags : currentModifierFlags()
+    let base = layerActive ? layerFlags : currentModifierFlags()
     var previous = base
     for (index, step) in steps.enumerated() {
         let from = previous
@@ -310,16 +306,11 @@ private var rightShiftUsed = false
 private var rightShiftPosted = false
 private var rightShiftGeneration = 0
 private var rightShiftLatch = false
-private let nKey: Int64 = 45
+private let gKey: Int64 = 5
 private let numLineFlags = CGEventFlags(rawValue:
     CGEventFlags.maskControl.rawValue | 0x00000001 |
     CGEventFlags.maskShift.rawValue | 0x00000002 |
     CGEventFlags.maskCommand.rawValue | 0x00000008
-)
-private let previousWindowFlags = CGEventFlags(rawValue:
-    CGEventFlags.maskCommand.rawValue | 0x00000010 |
-    CGEventFlags.maskAlternate.rawValue | 0x00000040 |
-    CGEventFlags.maskShift.rawValue | 0x00000004
 )
 private let tabKey: Int64 = 48
 private var tabTracking = false
@@ -328,10 +319,33 @@ private var tabPosted = false
 private var tabGeneration = 0
 private var tabFingers = 0
 private let tabHoldFlags = CGEventFlags(rawValue:
+    CGEventFlags.maskControl.rawValue | 0x00000001 |
+    CGEventFlags.maskAlternate.rawValue | 0x00000020 |
+    CGEventFlags.maskShift.rawValue | 0x00000002
+)
+private let rightShiftHoldFlags = numLineFlags
+private let returnHoldFlags = CGEventFlags(rawValue:
     CGEventFlags.maskCommand.rawValue | 0x00000008 |
     CGEventFlags.maskAlternate.rawValue | 0x00000020 |
     CGEventFlags.maskShift.rawValue | 0x00000002
 )
+
+/// The modifiers of the Tab, Right Shift, and Enter layers that are held right now.
+private var layerFlags: CGEventFlags {
+    var flags: CGEventFlags = []
+    if tabPosted {
+        flags.formUnion(tabHoldFlags)
+    }
+    if rightShiftPosted {
+        flags.formUnion(rightShiftHoldFlags)
+    }
+    if returnPosted {
+        flags.formUnion(returnHoldFlags)
+    }
+    return flags
+}
+
+private var layerActive: Bool { tabPosted || rightShiftPosted || returnPosted }
 
 private func beginLeftCommand() {
     guard !leftCommandTracking else { return }
@@ -526,9 +540,9 @@ private func holdRightShift(on event: CGEvent?) {
     rightShiftUsed = true
     if !rightShiftPosted {
         rightShiftPosted = true
-        postExactFlags(tabHoldFlags)
+        postExactFlags(layerFlags)
     }
-    event?.flags = tabHoldFlags
+    event?.flags = layerFlags
 }
 
 private func endRightShift() {
@@ -540,22 +554,20 @@ private func endRightShift() {
     rightShiftPosted = false
     rightShiftGeneration += 1
     if posted {
-        if !tabPosted {
-            DispatchQueue.main.async { releaseLayerFlags() }
-        }
+        DispatchQueue.main.async { releaseLayerFlags(rightShiftHoldFlags) }
     } else if !used {
         rightShiftLatch = true
-        postPreviousWindow()
+        postRightShiftTap()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             rightShiftLatch = false
         }
     }
 }
 
-private func postPreviousWindow() {
+private func postRightShiftTap() {
     var held = currentModifierFlags()
-    held.formUnion(previousWindowFlags)
-    postTap(nKey, flags: held)
+    held.formUnion(numLineFlags)
+    postTap(gKey, flags: held)
     fputs("bulkey: right shift tap\n", stderr)
 }
 
@@ -578,9 +590,9 @@ private func holdTab(on event: CGEvent?) {
     tabUsed = true
     if !tabPosted {
         tabPosted = true
-        postExactFlags(tabHoldFlags)
+        postExactFlags(layerFlags)
     }
-    event?.flags = tabHoldFlags
+    event?.flags = layerFlags
 }
 
 private func endTab() {
@@ -592,8 +604,8 @@ private func endTab() {
     tabUsed = false
     tabPosted = false
     tabGeneration += 1
-    if posted && !rightShiftPosted {
-        DispatchQueue.main.async { releaseLayerFlags() }
+    if posted {
+        DispatchQueue.main.async { releaseLayerFlags(tabHoldFlags) }
     } else if !used {
         if fingers == 0 {
             postTap(tabKey, flags: aloneTabFlags())
@@ -634,9 +646,9 @@ private func holdReturn(on event: CGEvent?) {
     returnUsed = true
     if !returnPosted {
         returnPosted = true
-        DispatchQueue.main.async { postExtraFlags(numLineFlags, enabled: true) }
+        postExactFlags(layerFlags)
     }
-    event?.flags.formUnion(numLineFlags)
+    event?.flags = layerFlags
 }
 
 private func endReturn() {
@@ -648,30 +660,20 @@ private func endReturn() {
     returnPosted = false
     returnGeneration += 1
     if posted {
-        DispatchQueue.main.async {
-            var extra = numLineFlags
-            if leftCommandPosted || rightCommandPosted {
-                extra.subtract(.maskCommand)
-            }
-            if tabPosted || rightShiftPosted {
-                extra.subtract(tabHoldFlags)
-            }
-            postExtraFlags(extra, enabled: false)
-        }
+        DispatchQueue.main.async { releaseLayerFlags(returnHoldFlags) }
     } else if !used {
         postReturn()
         fputs("bulkey: enter tap\n", stderr)
     }
 }
 
-/// Lifts the Tab and Right Shift layer, keeping any modifier another held key still owns.
-private func releaseLayerFlags() {
-    var extra = tabHoldFlags
+/// Lifts a Tab, Right Shift, or Enter layer, keeping any modifier another held key
+/// still owns.
+private func releaseLayerFlags(_ flags: CGEventFlags) {
+    var extra = flags
+    extra.subtract(layerFlags)
     if leftCommandPosted || rightCommandPosted {
         extra.subtract(.maskCommand)
-    }
-    if returnPosted {
-        extra.subtract(numLineFlags)
     }
     if capsFlagsPosted {
         extra.subtract(hyperFlags)
@@ -689,7 +691,7 @@ private func aloneTabFlags(extra: CGEventFlags = []) -> CGEventFlags {
         flags.formUnion(.maskCommand)
     }
     if returnPosted {
-        flags.formUnion(numLineFlags)
+        flags.formUnion(returnHoldFlags)
     }
     return flags
 }
@@ -982,7 +984,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         engageCapsModifiers(on: event)
     }
 
-    if keyCode == leftCommandKey, !(tabPosted || rightShiftPosted) {
+    if keyCode == leftCommandKey, !layerActive {
         let leftCommandPress = type == .keyDown
             || (type == .flagsChanged && event.flags.contains(.maskCommand))
         if leftCommandPress, tabTracking {
@@ -1044,7 +1046,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         }
     }
 
-    if keyCode == rightCommandKey, !(tabPosted || rightShiftPosted) {
+    if keyCode == rightCommandKey, !layerActive {
         let rightCommandPress = type == .keyDown || (type == .flagsChanged && (event.flags.rawValue & 0x10) != 0)
         if rightCommandPress, tabTracking {
             holdTab(on: nil)
@@ -1106,15 +1108,15 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         }
     }
 
-    if leftCommandTracking, !(tabPosted || rightShiftPosted), keyCode != leftCommandKey, type == .keyDown || type == .flagsChanged {
+    if leftCommandTracking, !layerActive, keyCode != leftCommandKey, type == .keyDown || type == .flagsChanged {
         holdLeftCommand(on: event)
     }
 
-    if rightCommandTracking, !(tabPosted || rightShiftPosted), keyCode != rightCommandKey, type == .keyDown || type == .flagsChanged {
+    if rightCommandTracking, !layerActive, keyCode != rightCommandKey, type == .keyDown || type == .flagsChanged {
         holdRightCommand(on: event)
     }
 
-    if keyCode == rightShiftKey, rightShiftTracking || !tabPosted {
+    if keyCode == rightShiftKey, rightShiftTracking || !(tabPosted || returnPosted) {
         let rightShiftPress = type == .keyDown || (type == .flagsChanged && (event.flags.rawValue & 0x4) != 0)
         if rightShiftPress, tabTracking {
             holdTab(on: nil)
@@ -1154,7 +1156,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         }
     }
 
-    if rightShiftTracking, !tabPosted, keyCode != rightShiftKey, type == .keyDown || type == .flagsChanged {
+    if rightShiftTracking, !(tabPosted || returnPosted), keyCode != rightShiftKey, type == .keyDown || type == .flagsChanged {
         holdRightShift(on: event)
     }
 
@@ -1184,7 +1186,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         holdTab(on: event)
     }
 
-    if enterLike, returnTracking || !(tabPosted || rightShiftPosted) {
+    if enterLike, returnTracking || !layerActive {
         if type == .keyDown {
             if returnPassed.contains(keyCode) {
                 return pass(event)
@@ -1210,7 +1212,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         }
     }
 
-    if returnTracking, !enterLike, !(tabPosted || rightShiftPosted), type == .keyDown || type == .flagsChanged {
+    if returnTracking, !enterLike, type == .keyDown || type == .flagsChanged {
         holdReturn(on: event)
     }
 
@@ -1224,7 +1226,7 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
                 postSequence(steps)
             }
             return nil
-        } else if !repeatKey, !(tabPosted || rightShiftPosted), touchState().total == 1,
+        } else if !repeatKey, !layerActive, touchState().total == 1,
             let steps = textEditSteps(keyCode: keyCode, flags: event.flags) {
             textEditHeld[keyCode] = steps
             fputs("bulkey: text edit \(keyCode)\n", stderr)
@@ -1235,12 +1237,12 @@ private let callback: CGEventTapCallBack = { _, type, event, _ in
         }
     }
 
-    if (tabPosted || rightShiftPosted),
+    if layerActive,
         type == .keyDown || type == .keyUp,
         !modifierKeyCodes.contains(keyCode) {
-        event.flags = tabHoldFlags
+        event.flags = layerFlags
         let hidType: UInt32 = type == .keyDown ? hidKeyDown : hidKeyUp
-        postHID(type: hidType, key: UInt16(keyCode), flags: hidFlags(from: tabHoldFlags))
+        postHID(type: hidType, key: UInt16(keyCode), flags: hidFlags(from: layerFlags))
         return nil
     }
 
